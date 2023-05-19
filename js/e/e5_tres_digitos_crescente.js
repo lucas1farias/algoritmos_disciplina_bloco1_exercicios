@@ -1,26 +1,44 @@
 
 
-// 5. Leia 3 (três) números e escreva-os em ordem crescente.
+/* 
+5. Leia 3 (três) números e escreva-os em ordem crescente.
+*/
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const firstNum = functionDb.numericInput("Informe um primeiro número ---> ")
-  const secondNum = functionDb.numericInput("Informe um segundo número ---> ")
-  const thirdNum = functionDb.numericInput("Informe um terceiro número ---> ")
   // const firstNum = -2
   // const secondNum = 12
   // const thirdNum = 0
+  const firstNum = numericInput("Informe um primeiro número ---> ")
+  const secondNum = numericInput("Informe um segundo número ---> ")
+  const thirdNum = numericInput("Informe um terceiro número ---> ")
 
   // Processamento
   const numbersOrder = ascendingOrder(firstNum, secondNum, thirdNum)
   const report = `Os dados [${firstNum}, ${secondNum}, ${thirdNum}] em ordem crescente, ficam: ${numbersOrder}`
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(report)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(report)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function ascendingOrder(a, b, c) {

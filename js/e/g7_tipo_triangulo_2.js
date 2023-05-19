@@ -7,28 +7,43 @@ formam, verifique se formam um triângulo equilátero (3 lados iguais), isóscel
 escaleno (3 lados diferentes). Não existe lado com tamanho 0 (zero).
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const side1st = functionDb.numericInput("Informe um ângulo de um primeiro triângulo ---> ")
-  const side2nd = functionDb.numericInput("Informe um ângulo de um segundo triângulo ---> ")
-  const side3rd = functionDb.numericInput("Informe um ângulo de um terceiro triângulo ---> ")
   // const side1st = 80
   // const side2nd = 20
   // const side3rd = 80
-
+  const side1st = numericInput("Informe um ângulo de um primeiro triângulo ---> ")
+  const side2nd = numericInput("Informe um ângulo de um segundo triângulo ---> ")
+  const side3rd = numericInput("Informe um ângulo de um terceiro triângulo ---> ")
+  
   // Processamento
   const triangleExists = isTriangle(side1st, side2nd, side3rd)
 
-  
   // Saída
-  functionDb.title("RELATÓRIO")
+  title("RELATÓRIO")
   if (triangleExists) {
     const triangleDef = triangleType(side1st, side2nd, side3rd)
-    functionDb.content(triangleDef)
+    content(triangleDef)
   }
-  functionDb.footer("FIM DA EXECUÇÃO")
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function isTriangle(angle1, angle2, angle3) {

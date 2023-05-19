@@ -1,25 +1,43 @@
 
 
-// 10. Leia uma data (dia, mês e ano), verifique e escreva se a data é ou não válida.
+/* 
+10. Leia uma data (dia, mês e ano), verifique e escreva se a data é ou não válida.
+*/
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const day = functionDb.numericInput("Informe uma data de dia do mês válida (de 26 até 31) ---> ")
-  const month = functionDb.numericInput("Informe uma mês válido (de 1 até 12) ---> ")
-  const year = functionDb.numericInput("Informe um ano válido (de 1 até 9999) ---> ")
   // const day = 29
   // const month = 2
   // const year = 2023 
-
+  const day = numericInput("Informe uma data de dia do mês válida (de 26 até 31) ---> ")
+  const month = numericInput("Informe uma mês válido (de 1 até 12) ---> ")
+  const year = numericInput("Informe um ano válido (de 1 até 9999) ---> ")
+  
   // Processamento
   const dateScanned = dateValidator(day, month, year)
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(dateScanned)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(dateScanned)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function dateValidator(d, m, y) {
@@ -44,7 +62,6 @@ function dateValidator(d, m, y) {
   
   // Verificação exclusiva p/ o mês Fevereiro
   if (m == 2) {
-    console.log('A')
     if (!februaryInvalidDayMin && !februaryInvalidDayMax) {
       if (!invalidYear && !invalidYearMax) {
         return correctDate
@@ -69,7 +86,6 @@ function dateValidator(d, m, y) {
   }
   
   if (d == 30) {
-    console.log('B')
       if (m == 4 || m == 6 || m == 9 || m == 11) {
         if (!invalidYear && !invalidYearMax) {
           return correctDate

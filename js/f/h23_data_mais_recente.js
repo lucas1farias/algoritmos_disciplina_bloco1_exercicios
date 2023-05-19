@@ -5,23 +5,22 @@
 recente.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const firstDateDay = functionDb.numericInput("Informe o dia da primeira data ---> ")
-  const firstDateMonth = functionDb.numericInput("Informe o mês da primeira data ---> ")
-  const firstDateYear = functionDb.numericInput("Informe o ano da primeira data ---> ")
-  const secondDateDay = functionDb.numericInput("Informe o dia da segunda data ---> ")
-  const secondDateMonth = functionDb.numericInput("Informe o mês da segunda data ---> ")
-  const secondDateYear = functionDb.numericInput("Informe o ano da segunda data ---> ")
-  
   // const firstDateDay = 17
   // const firstDateMonth = 3
   // const firstDateYear = 1999
   // const secondDateDay = 16
   // const secondDateMonth = 4
   // const secondDateYear = 1998
+  const firstDateDay = numericInput("Informe o dia da primeira data ---> ")
+  const firstDateMonth = numericInput("Informe o mês da primeira data ---> ")
+  const firstDateYear = numericInput("Informe o ano da primeira data ---> ")
+  const secondDateDay = numericInput("Informe o dia da segunda data ---> ")
+  const secondDateMonth = numericInput("Informe o mês da segunda data ---> ")
+  const secondDateYear = numericInput("Informe o ano da segunda data ---> ")
 
   // Processamento
   const oldestYear = getOlderYear(firstDateYear, secondDateYear)
@@ -65,6 +64,22 @@ function main() {
       }
     }
   }
+} 
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getOlderYear(y1, y2) {
@@ -93,9 +108,9 @@ function getOlderDay(d1, d2) {
 }
 
 function repeatableData(differentData) {
-  functionDb.title("RELATÓRIO")
-  functionDb.content(differentData)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(differentData)
+  footer("FIM DA EXECUÇÃO")
 }
 
 main()

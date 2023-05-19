@@ -6,22 +6,38 @@ maior do que ou igual a 0,5, o numero é arredondado para o inteiro imediatament
 contrario, é arredondado para o inteiro imediatamente inferior.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const floatNumber = functionDb.numericInput("Digite uma valor fracionado (ex: 7.2, 7.7) ---> ")
   // const floatNumber = 112.5
-
+  const floatNumber = numericInput("Digite uma valor fracionado (ex: 7.2, 7.7) ---> ")
+  
   // Processamento
   const floatNumberRemainder = remainder(floatNumber)
   const integerNumber = roundIt(floatNumberRemainder, floatNumber)
   const report = `Arredondamento de ${floatNumber}: ${integerNumber}`
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(report)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(report)
+  footer("FIM DA EXECUÇÃO")
+} 
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function remainder(value) {

@@ -7,14 +7,14 @@ máximo de duração do jogo é de 24 horas e que ele pode iniciar-se em um dia 
 seguinte.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  let gameStartHour = functionDb.numericInput("Informe a hora que o jogo iniciou ---> ")
-  const gameStartMnt = functionDb.numericInput("Informe o minuto que o jogo iniciou ---> ")
-  let gameEndHour = functionDb.numericInput("Informe a hora que o jogo terminou ---> ")
-  const gameEndMnt = functionDb.numericInput("Informe o minuto que o jogo terminou ---> ")
+  let gameStartHour = numericInput("Informe a hora que o jogo iniciou ---> ")
+  const gameStartMnt = numericInput("Informe o minuto que o jogo iniciou ---> ")
+  let gameEndHour = numericInput("Informe a hora que o jogo terminou ---> ")
+  const gameEndMnt = numericInput("Informe o minuto que o jogo terminou ---> ")
   
   // TESTES: 23:51 -> 3:33 = 3:42 ... 0:51 -> 3:33 = 2:42
   // let gameStartHour = 23
@@ -35,9 +35,9 @@ function main() {
   }
 
   if (gameStartHour == gameEndHour) {
-    functionDb.title("RELATÓRIO")
-    functionDb.content('Jogo excede as 24 horas de duração!')
-    functionDb.footer("FIM DA EXECUÇÃO")
+    title("RELATÓRIO")
+    content('Jogo excede as 24 horas de duração!')
+    footer("FIM DA EXECUÇÃO")
     return
   } 
   
@@ -66,13 +66,28 @@ function main() {
     hourDuration = hourDuration - 1
     minDuration = 60 - minDuration
     report = `A atividade iniciou ${beginning}, com duração: ${hourDuration}h:${minDuration}min`
-    
   }
 
-  functionDb.title("RELATÓRIO")
-  functionDb.content(activityReport)
-  functionDb.content(report)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(activityReport)
+  content(report)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getTimeDifference(category, hour1, hour1Minutes, hour2, hour2Minutes) {

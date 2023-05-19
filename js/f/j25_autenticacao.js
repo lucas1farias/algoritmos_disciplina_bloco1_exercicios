@@ -5,21 +5,37 @@
 uma mensagem de permissão de acesso ou não.
 */ 
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const password = functionDb.numericInput("Informe uma senha válida ---> ")
   // const password = 1234
-
+  const password = numericInput("Informe uma senha válida ---> ")
+  
   // Processamento
   const validation = verifyPassword(password)
   const outputData = security(validation, 'Acesso garantido!', 'Acesso negado!')
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(outputData)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(outputData)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function verifyPassword(key) {

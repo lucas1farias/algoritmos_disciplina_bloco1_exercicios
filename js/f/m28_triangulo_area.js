@@ -6,14 +6,14 @@ um retângulo. Baseado nisto, calcule e escreva a área deste retângulo. Lembre
 não pode ser negativo.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const rectBase = functionDb.numericInput('Informe um valor X em um plano cartesiano ---> ')
-  const rectHeight = functionDb.numericInput('Informe um valor Y em um plano cartesiano ---> ')
   // const rectBase = 12
   // const rectHeight = 7
+  const rectBase = numericInput('Informe um valor X em um plano cartesiano ---> ')
+  const rectHeight = numericInput('Informe um valor Y em um plano cartesiano ---> ')
 
   // Processamento
   const rectArea = getRectangleArea(rectBase, rectHeight)
@@ -27,14 +27,30 @@ function main() {
   }
 }
 
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
 function getRectangleArea(base, height) {
   return base * height
 }
 
 function repeatableContent(additional) {
-  functionDb.title("RELATÓRIO")
-  functionDb.content(additional)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(additional)
+  footer("FIM DA EXECUÇÃO")
 }
 
 main()

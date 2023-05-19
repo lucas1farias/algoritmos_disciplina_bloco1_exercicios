@@ -8,12 +8,12 @@ terceiro número é exatamente o número original de quatro dígitos. Por exempl
 2025 -> dividindo: 20 e 25 -> somando temos 45 -> 452 = 2025.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
-  const fourDigitsNumber = functionDb.numericInput("Informe um número de 4 dígitos ---> ")
   // const fourDigitsNumber = 4444
-
+  const fourDigitsNumber = numericInput("Informe um número de 4 dígitos ---> ")
+  
   // Números de 4 dígitos nessa condição: 2025 3025 9801
   // Processamento
   const thousand = getThousand(fourDigitsNumber)
@@ -32,9 +32,25 @@ function main() {
   }
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(report)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(report)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getThousand(numberFourDigits) {

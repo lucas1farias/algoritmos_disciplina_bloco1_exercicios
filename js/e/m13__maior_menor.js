@@ -5,20 +5,20 @@
 diferentes.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const firstInt = functionDb.numericInput("Informe um número inteiro ---> ")
-  const secondInt = functionDb.numericInput("Informe um próximo número inteiro ---> ")
-  const thirdInt = functionDb.numericInput("Informe mais um número inteiro ---> ")
-  const fourthInt = functionDb.numericInput("Informe outro número inteiro ---> ")
-  const fifthInt = functionDb.numericInput("Informe apenas mais um número inteiro ---> ")
   // const firstInt = 99
   // const secondInt = 105
   // const thirdInt = 400
   // const fourthInt = 202
   // const fifthInt = 3000
+  const firstInt = numericInput("Informe um número inteiro ---> ")
+  const secondInt = numericInput("Informe um próximo número inteiro ---> ")
+  const thirdInt = numericInput("Informe mais um número inteiro ---> ")
+  const fourthInt = numericInput("Informe outro número inteiro ---> ")
+  const fifthInt = numericInput("Informe apenas mais um número inteiro ---> ")
 
   // Processamento
   const validation = numbersAllDifferent(firstInt, secondInt, thirdInt, fourthInt, fifthInt)
@@ -58,10 +58,26 @@ function main() {
   }
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`Maior valor: ${biggest}`)
-  functionDb.content(`Menor valor: ${smallest}`)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(`Maior valor: ${biggest}`)
+  content(`Menor valor: ${smallest}`)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function numbersAllDifferent(n1, n2, n3, n4, n5) {

@@ -5,20 +5,36 @@
 quarto) em que o ângulo se localiza.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const angle = functionDb.numericInput("Informe um valor de ângulo entre 0 a 360 ---> ")
   // const angle = 271
-
+  const angle = numericInput("Informe um valor de ângulo entre 0 a 360 ---> ")
+  
   // Processamento
   const angleLocation = angleQuadrant(angle)
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(angleLocation)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(angleLocation)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function angleQuadrant(angleValue) {

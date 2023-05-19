@@ -5,19 +5,19 @@
 Escreva na tela qual dos professores tem salário total maior.
 */ 
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const hoursWorkedTeacher1 = functionDb.numericInput("Informe a qtd. de horas aula do professor A ---> ")
-  const paymentPerHourTeacher1 = functionDb.numericInput("Quanto o prof. 1 recebe por hora aula ---> ")
-  const hoursWorkedTeacher2 = functionDb.numericInput("Informe a qtd. de horas aula do professor A ---> ")
-  const paymentPerHourTeacher2 = functionDb.numericInput("Quanto o prof. 2 recebe por hora aula ---> ")  
   // const hoursWorkedTeacher1 = 102
   // const paymentPerHourTeacher1 = 44
   // const hoursWorkedTeacher2 = 90
   // const paymentPerHourTeacher2 = 70
-
+  const hoursWorkedTeacher1 = numericInput("Informe a qtd. de horas aula do professor A ---> ")
+  const paymentPerHourTeacher1 = numericInput("Quanto o prof. 1 recebe por hora aula ---> ")
+  const hoursWorkedTeacher2 = numericInput("Informe a qtd. de horas aula do professor A ---> ")
+  const paymentPerHourTeacher2 = numericInput("Quanto o prof. 2 recebe por hora aula ---> ")  
+  
   // Processamento
   const salarayTeacher1 = getSalary(hoursWorkedTeacher1, paymentPerHourTeacher1)
   const salarayTeacher2 = getSalary(hoursWorkedTeacher2, paymentPerHourTeacher2)
@@ -35,11 +35,26 @@ function main() {
   }
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  
-  functionDb.content(report)
-  functionDb.content(proof)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(report)
+  content(proof)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getSalary(hoursWorked, hourPayment) {

@@ -1,16 +1,18 @@
 
 
-// 1. Leia 3 (três) números, verifique e escreva quantos números iguais existem entre os números.
+/* 
+1. Leia 3 (três) números, verifique e escreva quantos números iguais existem entre os números.
+*/
 
 import { question } from "readline-sync"
 
 function main() {
-  const firstNum = numericInput('Informe um primeiro número ---> ')
-  const secondNum = numericInput('Informe um segundo número ---> ')
-  const thirdNum = numericInput('Informe um terceiro número ---> ')
   // const firstNum = 14
   // const secondNum = 14
   // const thirdNum = 14
+  const firstNum = numericInput('Informe um primeiro número ---> ')
+  const secondNum = numericInput('Informe um segundo número ---> ')
+  const thirdNum = numericInput('Informe um terceiro número ---> ')
   
   // Processamento
   const equals = numberIsEqual(firstNum, secondNum) + numberIsEqual(secondNum, thirdNum) + numberIsEqual(firstNum, thirdNum)

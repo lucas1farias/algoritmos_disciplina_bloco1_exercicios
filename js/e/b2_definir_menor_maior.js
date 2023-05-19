@@ -9,10 +9,10 @@ import { question } from "readline-sync"
 function main() {
   
   // Entradas
-  const firstNum = numericInput('Informe um primeiro número ---> ')
-  const secondNum = numericInput('Informe um segundo número ---> ')
   // const firstNum = -10
   // const secondNum = 5
+  const firstNum = numericInput('Informe um primeiro número ---> ')
+  const secondNum = numericInput('Informe um segundo número ---> ')
 
   // Processamento
   const bigger = compareValues(firstNum, secondNum, 'bigger')

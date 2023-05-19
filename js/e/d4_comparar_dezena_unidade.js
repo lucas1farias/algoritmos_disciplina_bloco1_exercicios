@@ -5,13 +5,13 @@
 do algarismo da unidade.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const twoDigitsNumber = functionDb.numericInput("Informe um número de 2 dígitos ---> ")
   // const twoDigitsNumber = 21
-
+  const twoDigitsNumber = numericInput("Informe um número de 2 dígitos ---> ")
+  
   // Processamento
   const unit = findNumberDecimalPlace(twoDigitsNumber, 'unidade')
   const ten = findNumberDecimalPlace(twoDigitsNumber, 'dezena')
@@ -19,13 +19,29 @@ function main() {
   const question = `A dezena ${ten} e a unidade ${unit} são iguais?`
 
   // Saída
-  functionDb.title('RELATÓRIO')
+  title('RELATÓRIO')
   if (numbersAlike) {
-    functionDb.content(question + ' Sim')
+    content(question + ' Sim')
   } else {
-    functionDb.content(question + ' Não')
+    content(question + ' Não')
   }
-  functionDb.footer('FIM DA EXECUÇÃO')
+  footer('FIM DA EXECUÇÃO')
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function findNumberDecimalPlace(value, level) {

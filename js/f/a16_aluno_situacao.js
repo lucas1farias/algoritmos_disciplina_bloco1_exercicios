@@ -7,24 +7,42 @@ final. Se esta média for maior ou igual a 5,0, o programa deve escreva “Aprov
 escreva “Reprovado”. Escreva um algoritmo para ler um número e verificar se ele obedece a esta característica.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const studentGrade1 = functionDb.numericInput("Informe a primeira nota do aluno ---> ")
-  const studentGrade2 = functionDb.numericInput("Informe a segunda nota do aluno ---> ")
   // const studentGrade1 = 7.5
   // const studentGrade2 = 7.7
-
+  const studentGrade1 = numericInput("Informe a primeira nota do aluno ---> ")
+  const studentGrade2 = numericInput("Informe a segunda nota do aluno ---> ")
+  
   // Processamento
   const studentMean = mean(studentGrade1, studentGrade2)
   const result = studentStatus(studentMean, 7, 5)
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`Média do aluno: ${studentMean}`)
-  functionDb.content(`${result}`)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(`Média do aluno: ${studentMean}`)
+  content(`${result}`)
+  footer("FIM DA EXECUÇÃO")
+} 
+
+// import { question } from "readline-sync"
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function mean(v1, v2) {

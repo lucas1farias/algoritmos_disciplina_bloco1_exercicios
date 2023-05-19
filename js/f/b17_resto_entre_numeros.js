@@ -15,48 +15,64 @@ Leia valores inteiros em duas variáveis distintas
     -> Escreva o quadrado dos números lidos.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  // const firstNumber = functionDb.numericInput("Informe um número inteiro ---> ")
-  // const secondNumber = functionDb.numericInput("Informe um outro número inteiro ---> ")
-  const firstNumber = 23
-  const secondNumber = 18
+  // const firstNumber = 23
+  // const secondNumber = 18
+  const firstNumber = numericInput("Informe um número inteiro ---> ")
+  const secondNumber = numericInput("Informe um outro número inteiro ---> ")
 
   // Processamento
   const integersDivision = getDivisionRemainder(firstNumber, secondNumber)
   
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`Condição atendida: ${integersDivision}`)
+  title("RELATÓRIO")
+  content(`Condição atendida: ${integersDivision}`)
   // 7 e 2 = 1
   if (integersDivision == 1) {
     const sumPlusRemainder = firstNumber + secondNumber + integersDivision
-    functionDb.content(`Quanto é a soma dos inteiros + resto? ${sumPlusRemainder}`)
+    content(`Quanto é a soma dos inteiros + resto? ${sumPlusRemainder}`)
   } 
   // 7 % 5 = 2
   else if (integersDivision == 2) {
     const firstNumberType = getNumberType(firstNumber) 
     const secondNumberType = getNumberType(secondNumber) 
-    functionDb.content(firstNumberType)
-    functionDb.content(secondNumberType)
+    content(firstNumberType)
+    content(secondNumberType)
   }
   // 7 % 4 = 3
   else if (integersDivision == 3) {
     const sumPlusFirst = firstNumber + secondNumber + firstNumber
-    functionDb.content(`Quanto é a soma dos inteiros + o primeiro? ${sumPlusFirst}`)
+    content(`Quanto é a soma dos inteiros + o primeiro? ${sumPlusFirst}`)
   }
   // 18 % 14 = 4
   else if (integersDivision == 4 && secondNumber != 0) {
     const sumAndDivision = (firstNumber + secondNumber) / secondNumber
-    functionDb.content(`Quanto é a soma dos inteiros dividida pelo segundo? ${sumAndDivision.toFixed(2)}`)
+    content(`Quanto é a soma dos inteiros dividida pelo segundo? ${sumAndDivision.toFixed(2)}`)
   }
   // 23 % 18 = 5
   else {
     const numbersSquare = `[${firstNumber}: ${firstNumber ** 2}] / [${secondNumber}: ${secondNumber ** 2}]`
-    functionDb.content(`QUADRADOS DOS INTEIROS: ${numbersSquare}`)
+    content(`QUADRADOS DOS INTEIROS: ${numbersSquare}`)
   }
-  functionDb.footer("FIM DA EXECUÇÃO")
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getDivisionRemainder(v1, v2) {

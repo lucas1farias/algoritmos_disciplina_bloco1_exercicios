@@ -7,13 +7,13 @@ Exemplo: √9801 = 99 = 98 + 01. O número 9801 é um quadrado perfeito.
 Escreva um algoritmo que leia um número de 4 dígitos e verifique se ele é um quadrado perfeito.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const fourDigitsNumber = functionDb.numericInput("Informe um número de 4 dígitos ---> ")
   // const fourDigitsNumber = 4167
-
+  const fourDigitsNumber = numericInput("Informe um número de 4 dígitos ---> ")
+  
   // Processamento
   const thousand = getThousand(fourDigitsNumber)
   const hundred = getHundred(fourDigitsNumber)
@@ -33,9 +33,25 @@ function main() {
   }
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(report)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(report)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getThousand(numberFourDigits) {

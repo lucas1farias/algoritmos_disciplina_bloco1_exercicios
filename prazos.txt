@@ -13,14 +13,18 @@
 13. API-SC #01 #G2 - Até Condicionais                           ... Entrega: 19 de maio          |       |
 14. API-SC #01 #G1 - Até Condicionais                           ... Entrega: 19 de maio          |       |
 
+
+
+
+
 20. M01: Atividade A | Fábio-01 | 01 a 23                       ... Entrega: 19 de maio, 10:00   | ok    | ok
 19. M01: Atividade B | Fábio-01 | 24 a 46                       ... Entrega: 19 de maio, 10:00   | ok    | ok
 03. M07: Atividade M | Strings | Fabio - 06                     ... Entrega: 19 de maio, 10:00   | ok    | ok
 
 17. M02: Atividade D | Funções - Fábio 01 (Nq. % 3 == 0)        ... Entrega: 19 de maio, 11:00   | ok    | ok
 
-04. API-SCO2 - Até Iteração WHILE                               ... Entrega: 19 de maio, 12:00   | ok    | s
+04. API-SCO2 - Até Iteração WHILE                               ... Entrega: 19 de maio, 12:00   | ok    | ok
 
-15. M03: Atividade F | Condicionais | Fabio - 02a | 16 a 30     ... Entrega: 19 de maio, 21:00   | ok    | n
-16. M03: Atividade E | Condicionais | Fabio - 02a | 01 a 15     ... Entrega: 19 de maio, 21:00   | ok    | n
 18. M02: Atividade C | GPT* --> Funções                         ... Entrega: 19 de maio, 21:00   | ok    | n
+16. M03: Atividade E | Condicionais | Fabio - 02a | 01 a 15     ... Entrega: 19 de maio, 21:00   | ok    | ok
+15. M03: Atividade F | Condicionais | Fabio - 02a | 16 a 30     ... Entrega: 19 de maio, 21:00   | ok    | ok

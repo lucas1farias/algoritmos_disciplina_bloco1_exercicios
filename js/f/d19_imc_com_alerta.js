@@ -7,15 +7,15 @@
 (IMC entre 25 e 30) ou obesidade mórbida (IMC acima de 30).
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const personHeight = functionDb.numericInput("Informe sua altura em (m) ---> ")
-  const personWeight = functionDb.numericInput("Informe seu peso em (kg) ---> ")
   // const personHeight = 1.78
   // const personWeight = 72
-
+  const personHeight = numericInput("Informe sua altura em (m) ---> ")
+  const personWeight = numericInput("Informe seu peso em (kg) ---> ")
+  
   // Processamento
   let imcCalculus = 0
   const heightCm = isInteger(personHeight)
@@ -32,10 +32,26 @@ function main() {
   const personWeightCategory = personShape(imcCalculus)
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`Dados da pessoa: ${personHeight}m    ${personWeight}kg`)
-  functionDb.content(personWeightCategory)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(`Dados da pessoa: ${personHeight}m    ${personWeight}kg`)
+  content(personWeightCategory)
+  footer("FIM DA EXECUÇÃO")
+} 
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function isInteger(value) {

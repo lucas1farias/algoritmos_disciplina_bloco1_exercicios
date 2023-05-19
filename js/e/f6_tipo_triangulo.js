@@ -6,17 +6,17 @@ verifique se formam um triângulo acutângulo (3 ângulos < 90º), retângulo (1
 obtusângulo (1 ângulo > 90º). Não existe ângulo com tamanho 0º (zero grau).
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const angle1st = functionDb.numericInput("Informe o valor do primeiro ângulo ---> ")
-  const angle2nd = functionDb.numericInput("Informe o valor do segundo ângulo ---> ")
-  const angle3rd = functionDb.numericInput("Informe o valor do terceiro ângulo ---> ")
   // const angle1st = 20
   // const angle2nd = 60
   // const angle3rd = 100
-
+  const angle1st = numericInput("Informe o valor do primeiro ângulo ---> ")
+  const angle2nd = numericInput("Informe o valor do segundo ângulo ---> ")
+  const angle3rd = numericInput("Informe o valor do terceiro ângulo ---> ")
+  
   // Processamento
   const anglesSum = triangleAnglesSum(angle1st, angle2nd, angle3rd)
   const isTriangle = isItTriangle(anglesSum)
@@ -25,15 +25,31 @@ function main() {
   if (isTriangle) {
     triangleLabel = getTriangleType(angle1st, angle2nd, angle3rd)
   } else {
-    functionDb.content("Os ângulos informados não formam um triângulo")
+    content("Os ângulos informados não formam um triângulo")
     return
   }
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`Ângulos do triângulo: [${angle1st}, ${angle2nd}, ${angle3rd}]`)
-  functionDb.content(triangleLabel)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(`Ângulos do triângulo: [${angle1st}, ${angle2nd}, ${angle3rd}]`)
+  content(triangleLabel)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function triangleAnglesSum(angle1, angle2, angle3) {

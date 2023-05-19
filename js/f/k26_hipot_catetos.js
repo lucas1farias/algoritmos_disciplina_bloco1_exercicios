@@ -4,16 +4,16 @@
 26. Leia os 3 (três) lados de um triângulo e identifique sua hipotenusa e seus catetos.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const oneSide = functionDb.numericInput("Informe o lado 1 de um triângulo ---> ")
-  const otherSide = functionDb.numericInput("Informe o lado 2 de um triângulo ---> ")
-  const lastSide = functionDb.numericInput("Informe o lado 3 de um triângulo ---> ")
   // const oneSide = 5
   // const otherSide = 3
   // const lastSide = 4
+  const oneSide = numericInput("Informe o lado 1 de um triângulo ---> ")
+  const otherSide = numericInput("Informe o lado 2 de um triângulo ---> ")
+  const lastSide = numericInput("Informe o lado 3 de um triângulo ---> ")
 
   // Processamento
   const hypotGuess = compare(oneSide, otherSide, lastSide)
@@ -53,6 +53,22 @@ function main() {
   }
 }
 
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
 function compare(n1, n2, n3) {
   if (n1 > n2 && n1 > n3) {
     return n1
@@ -69,9 +85,9 @@ function hypot(side1, side2) {
 }
 
 function output(outerContent) {
-  functionDb.title("RELATÓRIO")
-  functionDb.content(outerContent)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(outerContent)
+  footer("FIM DA EXECUÇÃO")
 }
 
 main()

@@ -5,29 +5,45 @@
 coeficiente A deve ser diferente de 0 (zero).
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const a = functionDb.numericInput("Determine um valor para A ---> ")
-  const b = functionDb.numericInput("Determine um valor para B ---> ")
-  const c = functionDb.numericInput("Determine um valor para C ---> ")
   // const a = 2
   // const b = 8
   // const c = -24
-
+  const a = numericInput("Determine um valor para A ---> ")
+  const b = numericInput("Determine um valor para B ---> ")
+  const c = numericInput("Determine um valor para C ---> ")
+  
   // Processamento
   const coeficientsDelta = getDelta(a, b, c)
   const xNegative = getX(b, a, coeficientsDelta, '-')
   const xPositive = getX(b, a, coeficientsDelta, '+')
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`A=${a} B=${b} C=${c}`)
-  functionDb.content(`Delta de ABC: ${coeficientsDelta}`)
-  functionDb.content(`Raiz em X uma linha: ${xNegative}`)
-  functionDb.content(`Raiz em X 2 linhas: ${xPositive}`)
-  functionDb.footer("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(`A=${a} B=${b} C=${c}`)
+  content(`Delta de ABC: ${coeficientsDelta}`)
+  content(`Raiz em X uma linha: ${xNegative}`)
+  content(`Raiz em X 2 linhas: ${xPositive}`)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function getDelta(a, b, c) {

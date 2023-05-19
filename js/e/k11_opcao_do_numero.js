@@ -6,18 +6,18 @@ valor de num2 se opção for igual a 2; e o valor de num3 se opção for igual a
 possíveis para a variável opção são 1, 2 e 3.
 */
 
-import * as functionDb from "../../functions.js"
+import { question } from "readline-sync"
 
 function main() {
   // Entradas
-  const option = functionDb.numericInput("Informe um número de opção (1, 2 ou 3) ---> ")
-  const firstNumber = functionDb.numericInput("Escolha um número qualquer ---> ")
-  const secondNumber = functionDb.numericInput("Escolha um outro número qualquer ---> ")
-  const thirdNumber = functionDb.numericInput("Escolha um próximo número qualquer ---> ")
   // const option = 0
   // const firstNumber = 20
   // const secondNumber = 62
   // const thirdNumber = 33
+  const option = numericInput("Informe um número de opção (1, 2 ou 3) ---> ")
+  const firstNumber = numericInput("Escolha um número qualquer ---> ")
+  const secondNumber = numericInput("Escolha um outro número qualquer ---> ")
+  const thirdNumber = numericInput("Escolha um próximo número qualquer ---> ")
   
   // Processamento
   const isOptionProper = isOutOfRange(option, 1, 3)
@@ -36,9 +36,25 @@ function main() {
   }
 
   // Saída
-  functionDb.title("RELATÓRIO")
-  functionDb.content(`Se a opção escolhida foi ${option}, então ela vale: ${report}`)
-  functionDb.content("FIM DA EXECUÇÃO")
+  title("RELATÓRIO")
+  content(`Se a opção escolhida foi ${option}, então ela vale: ${report}`)
+  footer("FIM DA EXECUÇÃO")
+}
+
+function numericInput(content) {
+  return Number(question(content))
+}
+
+function title(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
+}
+
+function content(content) {
+  console.log(content)
+}
+
+function footer(this_content) {
+  content(`\n========== ${this_content} ==========\n`)
 }
 
 function isOutOfRange(value, min, max) {
