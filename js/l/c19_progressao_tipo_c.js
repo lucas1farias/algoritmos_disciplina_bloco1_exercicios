@@ -1,17 +1,22 @@
 
 
 /*
-18. 1/n + 2/n-1 + 3/ n-2 + ... n/1
+S = 1/N - N-1/2 + 3/N-2 - ... +- N/1
 */
 
 import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  const valor_progressao = entrada_num('Digite um valor máximo para a progressão')
+
+  // Entrada
   // const valor_progressao = 5
+  const valor_progressao = entrada_num('Digite um valor máximo para a progressão')
+
+  // Processamento
+  const calculo = undefined
+  
   relatorio()
-  exibir(`Soma das frações: ${fracoes_somadas(valor_progressao)}`)
   fim()
 }
 
@@ -38,14 +43,7 @@ function fim() {
 
 // Funções de funcionalidade
 function fracoes_somadas(n) {
-  let calculo = 1/n
-  let i = 2
-
-  while (i <= n) {
-    calculo += (i / (n - (i - 1)))
-    i++
-  }
-  return calculo
+  
 }
 
 main()

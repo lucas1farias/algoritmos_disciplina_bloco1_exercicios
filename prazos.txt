@@ -3,11 +3,10 @@
 1. M00: Atividade O | utils.js                                  ... Entrega: 19 de maio          |       |
 2. M07: Atividade N | WordPlay | Strings                        ... Entrega: 19 de maio          |       |
 5. M06: Atividade L | FOR | Fabio - 03 | Questões de 17 a 25    ... Entrega: 19 de maio          |       |
-6. M06: Atividade K | FOR | Fabio - 03 | Questões de 01 a 16    ... Entrega: 19 de maio          | ok    | s
 7. M04: Atividade J | WHILE | Fabio - 04 | Questões de 16 a 31  ... Entrega: 19 de maio          |       |
 8. M04: Atividade I | WHILE | Fabio - 04 | Questões de 01 a 15  ... Entrega: 19 de maio          |       |
 9. M04: Atividade H | WHILE | Fabio - 03 | Questões de 17 a 25  ... Entrega: 19 de maio          |       |
-10. M04: Atividade G | WHILE | Fabio - 03 | Questões de 01 a 16 ... Entrega: 19 de maio          | ok    | s
+
 11. API-SC #01 #G4 - Até Condicionais                           ... Entrega: 19 de maio          |       |
 12. API-SC #01 #G3 - Até Condicionais                           ... Entrega: 19 de maio          |       |
 13. API-SC #01 #G2 - Até Condicionais                           ... Entrega: 19 de maio          |       |
@@ -17,14 +16,17 @@
 
 
 
-20. M01: Atividade A | Fábio-01 | 01 a 23                       ... Entrega: 19 de maio, 10:00   | ok    | ok
-19. M01: Atividade B | Fábio-01 | 24 a 46                       ... Entrega: 19 de maio, 10:00   | ok    | ok
-03. M07: Atividade M | Strings | Fabio - 06                     ... Entrega: 19 de maio, 10:00   | ok    | ok
+20. M01: Atividade A | Fábio-01 | 01 a 23                        ... Entrega: 19 de maio, 10:00   | ok    | ok
+19. M01: Atividade B | Fábio-01 | 24 a 46                        ... Entrega: 19 de maio, 10:00   | ok    | ok
+03. M07: Atividade M | Strings | Fabio - 06                      ... Entrega: 19 de maio, 10:00   | ok    | ok
 
-17. M02: Atividade D | Funções - Fábio 01 (Nq. % 3 == 0)        ... Entrega: 19 de maio, 11:00   | ok    | ok
+17. M02: Atividade D | Funções - Fábio 01 (Nq. % 3 == 0)         ... Entrega: 19 de maio, 11:00   | ok    | ok
 
-04. API-SCO2 - Até Iteração WHILE                               ... Entrega: 19 de maio, 12:00   | ok    | ok
+04. API-SCO2 - Até Iteração WHILE                                ... Entrega: 19 de maio, 12:00   | ok    | ok
 
-18. M02: Atividade C | GPT* --> Funções                         ... Entrega: 19 de maio, 21:00   | ok    | n
-16. M03: Atividade E | Condicionais | Fabio - 02a | 01 a 15     ... Entrega: 19 de maio, 21:00   | ok    | ok
-15. M03: Atividade F | Condicionais | Fabio - 02a | 16 a 30     ... Entrega: 19 de maio, 21:00   | ok    | ok
+18. M02: Atividade C | GPT* --> Funções                          ... Entrega: 19 de maio, 21:00   | ok    | n
+16. M03: Atividade E | Condicionais | Fabio - 02a | 01 a 15      ... Entrega: 19 de maio, 21:00   | ok    | ok
+15. M03: Atividade F | Condicionais | Fabio - 02a | 16 a 30      ... Entrega: 19 de maio, 21:00   | ok    | ok
+
+10. M04: Atividade G | WHILE | Fabio - 03 | Questões de 01 a 16  ... Entrega: 19 de maio          | ok    | ok
+06. M06: Atividade K | FOR | Fabio - 03 | Questões de 01 a 16    ... Entrega: 19 de maio          | ok    | ok

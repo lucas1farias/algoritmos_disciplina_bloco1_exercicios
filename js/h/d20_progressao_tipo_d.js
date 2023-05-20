@@ -8,10 +8,17 @@ import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  // const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão')
-  const valor_progressao = 4
+  
+  // Entrada
+  // const valor_progressao = 4
+  const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão')
+
+  // Processamento
+  const calculo = progressao(valor_progressao)
+  const saida = `Valor da progressão entre dividendos (ímpares - pares): ${calculo}`
+
   relatorio()
-  exibir(`Valor da progressão entre dividendos (ímpares - pares): ${progressao(valor_progressao)}`)
+  exibir(saida)
   fim()
 }
 
@@ -44,15 +51,18 @@ function eh_par(n) {
 function progressao(n) {
   let calculo = 0
   let dividendo = 1
+  let divisor = 1
 
-  for (let divisor = 1; divisor <= n; divisor++) {
+  while (divisor <= n) {
+
     if (!eh_par(divisor)) {
       calculo += (dividendo / divisor)
     } else {
       calculo -= (dividendo / divisor)
     }
-  }
 
+    divisor++
+  }
   return calculo
 }
 

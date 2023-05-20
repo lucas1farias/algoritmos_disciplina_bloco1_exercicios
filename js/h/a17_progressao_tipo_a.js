@@ -1,17 +1,24 @@
 
 
 /*
-17. 1/1 + 1/2 + 1/3 + ... 1/n
+17. S = 1/1 + 1/2 + 1/3 + ... 1/n
 */
 
 import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão')
+  
+  // Entrada
   // const valor_progressao = 5
+  const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão')
+
+  // Processamento
+  const calculo  = progressao(valor_progressao)
+  
+  // Saída
   relatorio()
-  exibir(progressao(valor_progressao))
+  exibir(calculo)
   fim()
 }
 

@@ -1,17 +1,24 @@
 
 
 /*
-20. S = 1/1 - 1/2 + 1/3 - ... 1/n
+17. S = 1/1 + 1/2 + 1/3 + ... 1/n
 */
 
 import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  // const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão')
-  const valor_progressao = 4
+
+  // Entrada
+  // const valor_progressao = 5
+  const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão')
+  
+  // Processamento
+  const calculo  = progressao(valor_progressao)
+
+  // Saída
   relatorio()
-  exibir(`Valor da progressão entre dividendos (ímpares - pares): ${progressao(valor_progressao)}`)
+  exibir(calculo)
   fim()
 }
 
@@ -37,27 +44,22 @@ function fim() {
 }
 
 // Funções de funcionalidade
-function eh_par(n) {
-  return n % 2 === 0
-}
-
 function progressao(n) {
+  let progresso = ''
   let calculo = 0
   let dividendo = 1
-  let divisor = 1
+  // let divisor = 1
 
-  while (divisor <= n) {
-
-    if (!eh_par(divisor)) {
-      calculo += (dividendo / divisor)
+  for (let divisor = 1; divisor <= n; divisor++) {
+    if (divisor < n) {
+      progresso += `${dividendo}/${divisor} + `
     } else {
-      calculo -= (dividendo / divisor)
+      progresso += `${dividendo}/${divisor}`
     }
-
-    divisor++
+    calculo += 1 / divisor
+    console.log(progresso)
   }
   return calculo
 }
-
 
 main()

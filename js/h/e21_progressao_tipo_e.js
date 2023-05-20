@@ -1,13 +1,25 @@
 
 
+/*  
+S = 1/1 + 3/2 + 5/3 + 7/4 + ... +99/50
+*/
+
 import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  // const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão do dividendo')
-  const valor_progressao = 99
+  
+  // Entrada
+  // const valor_progressao = 99
+  const valor_progressao = entrada_num('Digite um valor correspondente ao limite de uma progressão do dividendo')
+  
+  // Processamento
+  const calculo = progressao(valor_progressao)
+  const saida = `Valor da progressão entre (dividendo +=2 / divisor +=1): ${calculo}`
+  
+  // Saída
   relatorio()
-  exibir(`Valor da progressão entre (dividendo +=2 / divisor +=1): ${progressao(valor_progressao)}`)
+  exibir(saida)
   fim()
 }
 
@@ -33,20 +45,17 @@ function fim() {
 }
 
 // Funções de funcionalidade
-function progressao(limite_dividendo) {
+function progressao(n_dividendo) {
   let i_dividendo = 1
   let i_divisor = 1
   let fracao = ''
 
-  for (let i = i_dividendo; i <= limite_dividendo; i+=2) {
-    i_dividendo = i
+  while (i_dividendo < n_dividendo) {
+    i_dividendo += 2
     i_divisor += 1
   }
-
-  i_divisor -= 1
-  fracao = `${i_dividendo}/${i_divisor}`
+  fracao += `${i_dividendo}/${i_divisor}`
   return fracao
 }
-
 
 main()

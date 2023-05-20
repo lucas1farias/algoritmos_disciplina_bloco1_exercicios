@@ -1,17 +1,23 @@
 
 
 /*
-18. 1/n + 2/n-1 + 3/ n-2 + ... n/1
+18. S = 1/n + 2/n-1 + 3/ n-2 + ... n/1
 */
 
 import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  const valor_progressao = entrada_num('Digite um valor máximo para a progressão')
+
+  // Entrada
   // const valor_progressao = 5
+  const valor_progressao = entrada_num('Digite um valor máximo para a progressão')
+
+  // Processamento
+  const calculo = fracoes_somadas(valor_progressao)
+  
   relatorio()
-  exibir(`Soma das frações: ${fracoes_somadas(valor_progressao)}`)
+  exibir(`Soma das frações: ${calculo}`)
   fim()
 }
 

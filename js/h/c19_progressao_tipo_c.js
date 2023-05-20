@@ -1,16 +1,22 @@
 
 
 /*
-17. 1/1 + 1/2 + 1/3 + ... 1/n
+S = 1/N - N-1/2 + 3/N-2 - ... +- N/1
 */
 
 import { question } from "readline-sync"
 
 function main() {
   saltar_linha()
-  const valor_progressao = 10
+
+  // Entrada
+  // const valor_progressao = 5
+  const valor_progressao = entrada_num('Digite um valor máximo para a progressão')
+
+  // Processamento
+  const calculo = undefined
+  
   relatorio()
-  exibir(progressao(valor_progressao))
   fim()
 }
 
@@ -36,22 +42,8 @@ function fim() {
 }
 
 // Funções de funcionalidade
-function progressao(n) {
-  let progresso = ''
-  let calculo = 0
-  let dividendo = 1
-  // let divisor = 1
-
-  for (let divisor = 1; divisor <= n; divisor++) {
-    if (divisor < n) {
-      progresso += `${dividendo}/${divisor} + `
-    } else {
-      progresso += `${dividendo}/${divisor}`
-    }
-    calculo += 1 / divisor
-    console.log(progresso)
-  }
-  return calculo
+function fracoes_somadas(n) {
+  
 }
 
 main()
