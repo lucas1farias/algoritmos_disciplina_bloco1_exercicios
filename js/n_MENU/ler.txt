@@ -1,0 +1,32 @@
+
+
+Inspirado no capítulo (em anexo) faça o Jogo de Palavras como abaixo.
+
+1) Carregar Palavras de arquivo .txt, em anexo
+2) Manter as palavras em um lista de strings "palavras'
+3) Organize seu projeto em arquivo principal 
+    (wordplay, wordplay_features, string_utils, etc) para incluir as funções especializadas
+4) Faça uma Estrutura de Menu como detalhado abaixo.
+5) Comente "Acima da declaração" suas funções 
+    (features e string_utils) indicando se elas são do tipo Map, Filter, ou Reduce
+
+6) Menu Opções (mínimo):
+
+a) Todas as Palavras (mostrar total no final) ---------------------------------------------------------------------
+b) Palavras mínimo N letras (total e %) ---------------------------------------------------------------------------
+c) Palavras que não contém letras  (total e %) --------------------------------------------------------------------
+d) Palavras que contém todas letras (total e %) 
+e) Palavras que só contém letras (total e %) ----------------------------------------------------------------------
+f) Quantas palavras tem mais vogais que consoantes (total e %)
+g) Palavras "Palíndromas"
+h) Palavras "Abecedárias"
+i) Palavra(s) com maior soma valor ASCII
+j) Somatório ASCII das Palavras de Tamanho Múltiplo de N 
+k) Contar/Listar palavras que Começam e Terminam com a mesma letra
+
+
+Observe essas duas frases, elas são relacionadas a um algoritmo com menu de filtragem de palavras
+As frases me pedem fazer coisas
+d) Palavras que contém todas letras (total e %)
+e) Palavras que só contém letras (total e %)
+A opção D, por acaso, está tentando me dizer para eu filtrar palavras que tenham "TODAS AS LETRAS"? faltando a preposição, ou ela está me pedindo outra coisa?
