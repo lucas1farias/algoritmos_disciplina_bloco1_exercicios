@@ -5,12 +5,13 @@ const iniciar = require('readline-sync')
 function main() {
   let montadoras = []
   let veiculos = []
-  const montadoras_chaves = ['nome', 'país']
+  let montadoras_em_ordem_alfabetica = []
+  const montadoras_chaves = ['nome', 'pais']
   const veiculos_chaves = ['nome', 'montadora']
   
   let entrada = undefined
 
-  // Letras sem caracteres especiais
+  // Letras sem caracteres especiais (terminal com problemas de utf8)
   const paises_ = [
     'Japao', 'Alemanha', 'EUA', 'Coreia do Sul', 'Italia', 'Suecia', 'Reino Unido',
     'Suecia', 'China'
@@ -23,6 +24,7 @@ function main() {
     'Cadillac', 'Smart', 'Lamborghini', 'Maserati', 'Aston Martin', 'Bentley', 'Ferrari', 'McLaren', 'Rolls-Royce',
     'Lotus', 'Bugatti', 'Pagani', 'Koenigsegg', 'Genesis', 'Chery', 'Geely', 'BYD', 'Great Wall'
   ]
+  embaralhar(montadoras_, 0)
 
   const veiculos_ = [
     'Corolla', 'Golf', 'Mustang', 'Civic', 'Camaro', 'Altima', '3 Series', 'E-Class', 'A4', 'Elantra', 'Sorento',
@@ -31,43 +33,33 @@ function main() {
     'Aventador', 'Ghibli', 'DB11', 'Continental GT', '488 GTB', '720S', 'Phantom', 'Evora', 'Chiron', 'Huayra',
     'Regera', 'G70', 'Arrizo', 'Emgrand', 'Tang','Haval H6'
   ]
-
-  // Obter 20 montadoras fixas p/ já ter um banco de dados para testes + dinâmicos
-  const vinte_montadoras_fixas = []
-  let inc = 0
-  for (let i = 0; i < 20; i++) {
-    vinte_montadoras_fixas[inc] = montadoras_[n_aleatorio(0, len(montadoras_))]
-    inc++
-  }
-  
-  // Eu tive muitos problemas com essa parte
-  // A solução foi criar 20 montadoras fixas (procedimento acima)
-  for (let i = 0; i < len(vinte_montadoras_fixas); i++) {
-    // Criação de uma montadora: nome, país
-    const montadora_fixa = vinte_montadoras_fixas[i]
-    const pais_qualquer = paises_[n_aleatorio(0, len(paises_))]
-    novo_registro(montadoras, montadoras_chaves, [montadora_fixa, pais_qualquer])
-    
-    // Criação de um veículo: nome, montadora
-    const veiculo_qualquer = veiculos_[n_aleatorio(0, len(veiculos_))] // veiculos_[i]
-    novo_registro(veiculos, veiculos_chaves, [veiculo_qualquer, montadora_fixa])
-  }
   
   while (entrada != 0) {
     entrada = nova_entrada(menu())
-    
-    if (entrada === 1) {
+
+    // Criar banco de dados de montadoras e veículos dinâmicamente
+    if (entrada === 100) {
+      const qtd = nova_entrada_txt('Informe UMA QUANTIDADE (um inteiro) que representará a qtd. de MONTADORAS E VEÍCULOS >>> ')
+      criar_montadoras_e_veiculos_dinamicamente(
+        qtd, montadoras_, paises_, veiculos_, montadoras, montadoras_chaves, veiculos, veiculos_chaves
+      )
+    }
+    // Registrar N montadoras
+    else if (entrada === 1) {
       montadoras = nova_montadora(montadoras, montadoras_chaves)
       continuar()
     }
+    // Exibir montadoras cadastradas
     else if (entrada === 2) {
       console.log(montadoras)
       continuar()
     }
-    if (entrada === 3) {
+    // Registro N veículos
+    else if (entrada === 3) {
       veiculos = novo_veiculo(veiculos, veiculos_chaves)
       continuar()
     }
+    // Exibir veículos cadastrados
     else if (entrada === 4) {
       console.log(veiculos)
       continuar()
@@ -82,10 +74,35 @@ function main() {
     // Filtrar veículos por país
     else if (entrada === 6) {
       const pais = nova_entrada_txt('Informe o NOME DO PAÍS >>> ')
-      console.log(veiculo_por_pais(
-        veiculos, montadoras, veiculos_chaves[1], montadoras_chaves[1], veiculos_chaves[0], pais
-      )) 
+      console.log(veiculo_por_pais(veiculos, montadoras, pais)) 
     }
+    // Organizar montadoras por ordem alfabética
+    else if (entrada === 7) {
+      montadoras_em_ordem_alfabetica = ordenar_ordem_alfabetica(montadoras)
+      console.log(montadoras_em_ordem_alfabetica)
+    }
+  }
+}
+
+function criar_montadoras_e_veiculos_dinamicamente(qtd, ref_a, ref_b, ref_c, ref_d, ref_e, ref_f, ref_g) {
+  // Obter montadoras fixas (com base em "qtd") p/ já ter um banco de dados para testes + dinâmicos
+  // Os índices de "montadoras_" são embaralhados para não vir sempre os "qtd (int)" primeiros índices dela
+  const montadoras_dinamicas = []
+  let array_i = 0
+  for (let i = 0; i < qtd; i++) {
+    montadoras_dinamicas[array_i] = ref_a[i]
+    array_i++
+  }
+  
+  for (let i = 0; i < len(montadoras_dinamicas); i++) {
+    // Criação de uma montadora: nome, país
+    const montadora_fixa = montadoras_dinamicas[i]
+    const pais_qualquer = ref_b[n_aleatorio(0, len(ref_b))]
+    novo_registro(ref_d, ref_e, [montadora_fixa, pais_qualquer])
+    
+    // Criação de um veículo: nome, montadora
+    const veiculo_qualquer = ref_c[n_aleatorio(0, len(ref_c))] // veiculos_[i]
+    novo_registro(ref_f, ref_g, [veiculo_qualquer, montadora_fixa])
   }
 }
 
@@ -101,45 +118,159 @@ function montadoras_por_pais(registro, nome_chave_a, nome_chave_b, valor) {
   return array
 }
 
-function veiculo_por_pais(
-  registro_veiculo, registro_montadora, 
-  nome_da_chave_da_montadora, nome_da_chave_do_pais, 
-  nome_da_chave_do_nome_do_veiculo, 
-  pais_alvo
-  ) {
-  // Montadora: nome, país
-  // Veículo: nome, montadora
-  // Eu quero saber quantos veículos pertencem ao país X
-  // EXEMPLO: (entrada = 'Alemanha') O "Golf" é da "Volkswagen" -> "Volkswagen" é da "entrada"?
-  // Quem é "Golf"? veiculos[i]['nome'] (veiculos_chaves[0])
-  // Quem é "Volkswagen"? veiculos[i]['montadora'] (veiculos_chaves[1])
-  // QUem é "Alemanha"? montadoras[i]['país'] (montadoras_chaves[1])
+function veiculo_por_pais(registro_veiculo, registro_montadora, pais_alvo) {
+  // Atribs. de montadora || nome, país
+  // Atribs. de Veículo   || nome, montadora
+  // Objetivo             || saber quantos veículos pertencem ao país X (entrada = pais_alvo)
+
   const array = []
   let array_i = 0
-  let montadora_do_veiculo = ''
   let pais_da_montadora = ''
   for (let i = 0; i < len(registro_veiculo); i++) {
-    montadora_do_veiculo = registro_veiculo[i][nome_da_chave_da_montadora]
-    pais_da_montadora = registro_montadora[i][nome_da_chave_do_pais]
+    pais_da_montadora = registro_montadora[i]['pais']
     if (pais_da_montadora === pais_alvo) {
       // console.log('---o ',pais_da_montadora, pais_alvo, '---u ', pais_da_montadora === pais_alvo) 
-      array[array_i] = registro_veiculo[i][nome_da_chave_do_nome_do_veiculo]
+      array[array_i] = registro_veiculo[i]['nome']
       array_i++
     }
   }
   return array
 }
 
+function ordenar_ordem_alfabetica(registro_montadora) {
+  let array = []
+  let array_i = 0
+  for (let i = 0; i < len(registro_montadora); i++) {
+    // [código inteiro da string [0] do nome da montadora, a chave inteira]
+    array[array_i] = [codigo_letra(registro_montadora[i]['nome'][0]), registro_montadora[i]]
+    array_i++
+  }
+  // "array" neste momento, possui um conjunto de índices: [int, {'nome': 'qualquer_nome', 'país': 'qualquer_pais'}]
+  // A função "particionar", que é parte de "ordenar", foi adaptada p/ uso em array com arrays
+  // A adaptação foi feita adicionando o [0] em dois locais da função onde normalmente não haveria
+  // Portanto, "array", tendo [[int, {}], [int, {}], ...], o índice escolhido como critério é: 0
+  array = ordenar_array_de_arrays(criterio_menor_igual, array, 0, len(array) - 1)
+  array_i = 0
+  // Ao final, após o ordenamento, eu preciso retirar o índice [0], pois ele já cumpriu seu papel de ordenamento
+  // Então eu percorro o "array" e anexo ao "array_final" somente os dados ordenados [1], excluindo os inteiros [0]
+  const array_final = []
+  for (let i = 0; i < len(array); i++) {
+    array_final[array_i] = array[i][1]
+    array_i++
+  }
+  return array_final
+}
+
+function intervalo(min, max) {
+  const array = []
+  let array_i = 0
+  for (let i = min; i < max; i++) {
+    array[array_i] = i
+    array_i++
+  }
+  return array
+}
+
+function fatiar(colecao, min, max) {
+  let string = ''
+  for (let i = min; i <= max; i++) {
+    string += colecao[i]
+  }
+  return string
+}
+
+function nova_lista(criterio, colecao, separador) {
+  const array = []
+  let array_i = 0
+  let pos = 0
+  for (let i = 0; i < len(colecao); i++) {
+    if (colecao[i] === separador) {
+      array[array_i] = criterio(colecao, pos, i - 1)
+      array_i++
+      pos = i + 1
+    }
+  }
+  return array
+}
+
+function codigo_letra(letra) {
+  const maiusculas = nova_lista(fatiar, 'A.B.C.D.E.F.G.H.I.J.K.L.M.N.O.P.Q.R.S.T.U.V.W.X.Y.Z.', '.')
+  const minusculas = nova_lista(fatiar, 'a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.v.w.x.y.z.', '.')
+  const n_maiusculas = intervalo(65, 91)
+  const n_minusculas = intervalo(97, 123)
+  for (let i = 0; i < len(maiusculas); i++) {
+    if (maiusculas[i] === letra) {
+      return n_maiusculas[i]
+    }
+  }
+  for (let i = 0; i < len(minusculas); i++) {
+    if (minusculas[i] === letra) {
+      return n_minusculas[i]
+    }
+  }
+  return false
+}
+
+// QUICKSORT
+function realocar(colecao, b, a) {
+  const pos_inicial = colecao[a]
+  colecao[a] = colecao[b]
+  colecao[b] = pos_inicial
+}
+
+// Normalmente lida com arrays com valores únicos
+// Neste caso em particular, estou lidando com um array com arrays aninhados e preciso do índice 0
+function particionar_array_de_arrays(criterio, colecao, esquerda, direita) {
+  const ref = colecao[direita][0]
+  let menor_pos_nova = esquerda - 1
+  for (let menor_pos_antiga = esquerda; menor_pos_antiga < direita; menor_pos_antiga++) {
+    if (criterio(colecao[menor_pos_antiga][0], ref)) {
+      menor_pos_nova++
+      realocar(colecao, menor_pos_antiga, menor_pos_nova)
+    }
+  }
+  realocar(colecao, menor_pos_nova + 1, direita)
+  return menor_pos_nova + 1
+}
+
+function criterio_maior_igual(a, b) {
+  return a >= b
+}
+
+function criterio_menor_igual(a, b) {
+  return a <= b
+}
+
+function ordenar_array_de_arrays(criterio, colecao, esquerda, direita) {
+  if (esquerda < direita) {
+    const ref_anterior = particionar_array_de_arrays(criterio, colecao, esquerda, direita)
+    ordenar_array_de_arrays(criterio, colecao, esquerda, ref_anterior - 1)
+    ordenar_array_de_arrays(criterio, colecao, ref_anterior + 1, direita)
+    return colecao
+  }
+}
+
+function embaralhar(colecao, indice_de_partida) {
+  let n = n_aleatorio(0, len(colecao))
+  for (let i = indice_de_partida; i < len(colecao); i++) {
+    const pos_inicial = colecao[i]
+    colecao[i] = colecao[n]
+    colecao[n] = pos_inicial
+  }
+  return colecao
+}
+
 function menu() {
   return `
-  ========== VEÍCULOS ==========
+  ========== VEICULOS ==========
   0 - Sair
   1 - Nova montadora
   2 - Ver montadoras
-  3 - Novo veículo
-  4 - Ver veículos
-  5 - Mostrar montadoras por país
-  6 - Mostrar veículos por país
+  3 - Novo veiculo
+  4 - Ver veiculos
+  5 - Mostrar montadoras por pais
+  6 - Mostrar veiculos por pais
+  7 - Mostrar montadoras em ordem alfabetica
   >>> `
 }
 

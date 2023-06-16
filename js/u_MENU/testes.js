@@ -1,13 +1,66 @@
 
 
-function n_aleatorio(min, max) {
-  return Math.floor(Math.random() * (max - min) - min)
+function len(colecao) {
+  let contador = 0
+  for (let i in colecao) {
+    contador++
+  }
+  return contador
 }
 
-const paises_ = [
-  'Japão', 'Alemanha', 'EUA', 'Coréia do Sul', 'Itália', 'Suécia', 'Reino Unido',
-  'Suécia', 'China'
-]
+function realocar(colecao, b, a) {
+  const pos_inicial = colecao[a]
+  colecao[a] = colecao[b]
+  colecao[b] = pos_inicial
+}
+
+function particionar(criterio, colecao, esquerda, direita) {
+  const ref = colecao[direita]
+  let menor_pos_nova = esquerda - 1
+  for (let menor_pos_antiga = esquerda; menor_pos_antiga < direita; menor_pos_antiga++) {
+    if (criterio(colecao[menor_pos_antiga], ref)) {
+      menor_pos_nova++
+      realocar(colecao, menor_pos_antiga, menor_pos_nova)
+    }
+  }
+  realocar(colecao, menor_pos_nova + 1, direita)
+  return menor_pos_nova + 1
+}
+
+function criterio_maior_igual(a, b) {
+  return a >= b
+}
+
+function criterio_menor_igual(a, b) {
+  return a <= b
+}
+
+function ordenar(criterio, colecao, esquerda, direita) {
+  if (esquerda < direita) {
+    const ref_anterior = particionar(criterio, colecao, esquerda, direita)
+    ordenar(criterio, colecao, esquerda, ref_anterior - 1)
+    ordenar(criterio, colecao, ref_anterior + 1, direita)
+    return colecao
+  }
+}
+
+function n_aleatorio(min, max) {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+function embaralhar(colecao, indice_de_partida) {
+  let n = n_aleatorio(0, len(colecao))
+  for (let i = indice_de_partida; i < len(colecao); i++) {
+    const pos_inicial = colecao[i]
+    colecao[i] = colecao[n]
+    colecao[n] = pos_inicial
+  }
+  return colecao
+}
+
+const rank = [5, 2, 4, 1, 3]
+// console.log(ordenar(criterio_maior_igual, rank, 0, len(rank) - 1))
+// console.log(ordenar(criterio_menor_igual, rank, 0, len(rank) - 1))
 
 const montadoras_ = [
   'Toyota', 'Volkswagen', 'Ford', 'Honda', 'Chevrolet', 'Nissan', 'BMW', 'Mercedes-Benz', 'Audi', 'Hyundai', 'Kia',
@@ -16,13 +69,5 @@ const montadoras_ = [
   'Cadillac', 'Smart', 'Lamborghini', 'Maserati', 'Aston Martin', 'Bentley', 'Ferrari', 'McLaren', 'Rolls-Royce',
   'Lotus', 'Bugatti', 'Pagani', 'Koenigsegg', 'Genesis', 'Chery', 'Geely', 'BYD', 'Great Wall'
 ]
-
-const veiculos_ = [
-  'Corolla', 'Golf', 'Mustang', 'Civic', 'Camaro', 'Altima', '3 Series', 'E-Class', 'A4', 'Elantra', 'Sorento',
-  '500', 'Clio', 'V60', 'Outlander', '208', 'Impreza', '300', 'F-Type', 'Range Rover', 'MX-5', 'Wrangler', 'Swift', 
-  'IS', 'Model S', 'Cooper', '911', 'NSX', 'Challenger', 'Q50', 'Enclave', 'Giulia', 'Sierra', 'Escalade', 'ForTwo',
-  'Aventador', 'Ghibli', 'DB11', 'Continental GT', '488 GTB', '720S', 'Phantom', 'Evora', 'Chiron', 'Huayra',
-  'Regera', 'G70', 'Arrizo', 'Emgrand', 'Tang','Haval H6'
-]
-
-console.log(montadoras_.length, veiculos_.length)
+const vogais = ['a', 'e', 'i', 'o', 'u']
+console.log(embaralhar(vogais, 0))
