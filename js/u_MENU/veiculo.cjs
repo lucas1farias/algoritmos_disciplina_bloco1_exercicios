@@ -2,12 +2,21 @@
 
 const iniciar = require('readline-sync')
 
+/*
+Edição deve ser feita diretamente acessando o objeto na sua chave (editar_montadora)
+As funções "nova_montadora" e "novo_veiculo" não usam "novo_registro"
+"novo_registro"                   = casos de criação dinâmica (chaves e valores já configurados)
+"nova_montadora" e "novo_veiculo" = casos de criação em terminal (chaves e valores passados em loop) 
+*/
+
 function main() {
   let montadoras = []
   let veiculos = []
   let montadoras_em_ordem_alfabetica = []
   const montadoras_chaves = ['nome', 'pais']
   const veiculos_chaves = ['nome', 'montadora']
+  const info = '\n======= INFO =======\n'
+  const aviso = '\n======= AVISO =======\n'
   
   let entrada = undefined
 
@@ -39,10 +48,17 @@ function main() {
 
     // Criar banco de dados de montadoras e veículos dinâmicamente
     if (entrada === 100) {
-      const qtd = nova_entrada_txt('Informe UMA QUANTIDADE (um inteiro) que representará a qtd. de MONTADORAS E VEÍCULOS >>> ')
-      criar_montadoras_e_veiculos_dinamicamente(
-        qtd, montadoras_, paises_, veiculos_, montadoras, montadoras_chaves, veiculos, veiculos_chaves
-      )
+      const qtd = nova_entrada_txt('Criar quantas MONTADORAS E VEÍCULOS de uma vez? (min: 1, max: 50) >>> ')
+      if (qtd <= 50) {
+        criar_montadoras_e_veiculos_dinamicamente(
+          qtd, montadoras_, paises_, veiculos_, montadoras, montadoras_chaves, veiculos, veiculos_chaves
+        )
+        console.log(`${info}${qtd} montadora(s) e veículo(s) foram add`)
+      }
+      else {
+        console.log(`${aviso}O bando de dados dinamico so possui ate 50 dados diferentes`)
+      }
+      continuar()
     }
     // Registrar N montadoras
     else if (entrada === 1) {
@@ -67,7 +83,7 @@ function main() {
     // Filtrar montadoras por país
     else if (entrada === 5) {
       const pais = nova_entrada_txt('Informe o NOME DO PAÍS >>> ')
-      const montadoras_deste_pais = montadoras_por_pais(montadoras, montadoras_chaves[1], montadoras_chaves[0], pais)
+      const montadoras_deste_pais = montadoras_por_pais(montadoras, pais)
       console.log(montadoras_deste_pais)
       continuar()
     }
@@ -81,14 +97,125 @@ function main() {
       montadoras_em_ordem_alfabetica = ordenar_ordem_alfabetica(montadoras)
       console.log(montadoras_em_ordem_alfabetica)
     }
+    // Editar uma montadora (nome)
+    else if (entrada === 8) {
+      const montadora_a_ser_editada = nova_entrada_txt('Informe o NOME da MONTADORA a ser editada >>> ')
+      const nome_novo = nova_entrada_txt('Informe o NOME NOVO para a MONTADORA >>> ')
+      editar_montadora(montadoras, montadora_a_ser_editada, nome_novo, 0)
+      console.log(montadoras)
+    }
+    // Remover uma montadora
+    else if (entrada === 9) {
+      const nome_montadora = nova_entrada_txt('Digite o NOME DA MONTADORA a ser removida >>> ')
+      const consulta = consultar_montadora(montadoras, nome_montadora)
+      if (consulta[0]) {
+        console.log(`${info}Montadora encontrada: ${montadoras[consulta[1]]}`)
+        montadoras = filtrar_versao_limitada(criterio_posicao_no_array, montadoras, consulta[1])
+        console.log(montadoras)
+      }
+      else {
+        console.log(`${aviso}A montadora não está cadastrada ou não existe`)
+      }
+    }
+    // Editar uma montadara (país)
+    else if (entrada === 10) {
+      const montadora_a_ser_editada = nova_entrada_txt('Informe o NOME da MONTADORA a ser editada >>> ')
+      const nome_novo = nova_entrada_txt('Informe o NOME NOVO DO PAIS da MONTADORA >>> ')
+      editar_montadora(montadoras, montadora_a_ser_editada, nome_novo, 1)
+      console.log(montadoras)
+    }
   }
+}
+
+// Quando "true", exclui o "i" da coleção
+function criterio_posicao_no_array(i, pos) {
+  return i !== pos
+}
+
+// Função usada para remover um objeto (montadora, veículo)
+function filtrar_versao_limitada(criterio, colecao, ref) {
+  const array = []
+  let array_i = 0
+  for (let i = 0; i < len(colecao); i++) {
+    if (criterio(i, ref)) {
+      array[array_i] = colecao[i]
+      array_i++
+    }
+  }
+  return array
+}
+
+function consultar_montadora(registro, ref) {
+  for (let i = 0; i < len(registro); i++) {
+    const cada_montadora = registro[i]['nome']
+    if (cada_montadora === ref) {
+      // [0] = prova que a montadora existe / [1] = índice do objeto de montadora
+      return [true, i]
+    }
+  }
+  return false
+}
+
+function editar_montadora(registro, alvo, nome_novo, atrib) {
+  // Recebe o índice do objeto alvo passado na entrada
+  let indice_do_alvo = 0
+  
+  // Quando a atributo for a chave: ['nome']
+  if (atrib === 0) {
+    for (let i = 0; i < len(registro); i++) {
+      const cada_indice_0_aninhado = registro[i]['nome']
+      if (cada_indice_0_aninhado === alvo) {
+        indice_do_alvo = i
+        break
+      }
+    }
+    
+    console.log('ANTES: ', registro[indice_do_alvo])
+    registro[indice_do_alvo]['nome'] = nome_novo
+    console.log('AGORA: ', registro[indice_do_alvo])
+  }
+  // Quando o atributo for a chave: ['pais']
+  else {
+    for (let i = 0; i < len(registro); i++) {
+      const cada_indice_0_aninhado = registro[i]['pais']
+      if (cada_indice_0_aninhado === alvo) {
+        indice_do_alvo = i
+        break
+      }
+    }
+    
+    console.log('ANTES: ', registro[indice_do_alvo])
+    registro[indice_do_alvo]['pais'] = nome_novo
+    console.log('AGORA: ', registro[indice_do_alvo])
+  }
+}
+
+function menu() {
+  return `
+  ========== VEICULOS ==========
+  0 - Sair
+  1 - Nova montadora
+  2 - Ver montadoras
+  3 - Novo veiculo
+  4 - Ver veiculos
+  5 - Mostrar montadoras por pais
+  6 - Mostrar veiculos por pais
+  7 - Mostrar montadoras em ordem alfabetica
+  9 - Remover uma montadora
+  
+  ===== MONTADORA =====
+  8  - Editar montadora (nome)
+  10 - Editar montadora (pais)
+  >>> `
 }
 
 function criar_montadoras_e_veiculos_dinamicamente(qtd, ref_a, ref_b, ref_c, ref_d, ref_e, ref_f, ref_g) {
   // Obter montadoras fixas (com base em "qtd") p/ já ter um banco de dados para testes + dinâmicos
   // Os índices de "montadoras_" são embaralhados para não vir sempre os "qtd (int)" primeiros índices dela
+  
   const montadoras_dinamicas = []
   let array_i = 0
+  
   for (let i = 0; i < qtd; i++) {
     montadoras_dinamicas[array_i] = ref_a[i]
     array_i++
@@ -106,12 +233,12 @@ function criar_montadoras_e_veiculos_dinamicamente(qtd, ref_a, ref_b, ref_c, ref
   }
 }
 
-function montadoras_por_pais(registro, nome_chave_a, nome_chave_b, valor) {
+function montadoras_por_pais(registro, valor) {
   const array = []
   let array_i = 0
   for (let i = 0; i < len(registro); i++) {
-    if (registro[i][nome_chave_a] === valor) {
-      array[array_i] = registro[i][nome_chave_b]
+    if (registro[i]['pais'] === valor) {
+      array[array_i] = registro[i]['nome']
       array_i++
     }
   }
@@ -119,10 +246,11 @@ function montadoras_por_pais(registro, nome_chave_a, nome_chave_b, valor) {
 }
 
 function veiculo_por_pais(registro_veiculo, registro_montadora, pais_alvo) {
-  // Atribs. de montadora || nome, país
-  // Atribs. de Veículo   || nome, montadora
-  // Objetivo             || saber quantos veículos pertencem ao país X (entrada = pais_alvo)
-
+  /*
+  Atribs. de montadora || nome, país
+  Atribs. de Veículo   || nome, montadora
+  Objetivo             || saber quantos veículos pertencem ao país X (entrada = pais_alvo)
+  */
   const array = []
   let array_i = 0
   let pais_da_montadora = ''
@@ -140,24 +268,33 @@ function veiculo_por_pais(registro_veiculo, registro_montadora, pais_alvo) {
 function ordenar_ordem_alfabetica(registro_montadora) {
   let array = []
   let array_i = 0
+
   for (let i = 0; i < len(registro_montadora); i++) {
     // [código inteiro da string [0] do nome da montadora, a chave inteira]
     array[array_i] = [codigo_letra(registro_montadora[i]['nome'][0]), registro_montadora[i]]
     array_i++
   }
-  // "array" neste momento, possui um conjunto de índices: [int, {'nome': 'qualquer_nome', 'país': 'qualquer_pais'}]
-  // A função "particionar", que é parte de "ordenar", foi adaptada p/ uso em array com arrays
-  // A adaptação foi feita adicionando o [0] em dois locais da função onde normalmente não haveria
-  // Portanto, "array", tendo [[int, {}], [int, {}], ...], o índice escolhido como critério é: 0
+
+  /*
+  "array" neste momento, possui um conjunto de índices: [int, {'nome': 'qualquer_nome', 'país': 'qualquer_pais'}]
+  A função "particionar", que é parte de "ordenar", foi adaptada p/ uso em array com arrays
+  A adaptação foi feita adicionando o [0] em dois locais da função onde normalmente não haveria
+  Portanto, "array", tendo [[int, {}], [int, {}], ...], o índice escolhido como critério é: 0
+  */
   array = ordenar_array_de_arrays(criterio_menor_igual, array, 0, len(array) - 1)
   array_i = 0
-  // Ao final, após o ordenamento, eu preciso retirar o índice [0], pois ele já cumpriu seu papel de ordenamento
-  // Então eu percorro o "array" e anexo ao "array_final" somente os dados ordenados [1], excluindo os inteiros [0]
+  
+  /*
+  Ao final, após o ordenamento, eu preciso retirar o índice [0], pois ele já cumpriu seu papel de ordenamento
+  "array" é percorrido e é anexado ao "array_final" somente os objetos [1], excluindo os inteiros [0]
+  */
   const array_final = []
+
   for (let i = 0; i < len(array); i++) {
     array_final[array_i] = array[i][1]
     array_i++
   }
+
   return array_final
 }
 
@@ -218,8 +355,10 @@ function realocar(colecao, b, a) {
   colecao[b] = pos_inicial
 }
 
-// Normalmente lida com arrays com valores únicos
-// Neste caso em particular, estou lidando com um array com arrays aninhados e preciso do índice 0
+/*
+Normalmente lida com arrays com valores únicos
+Neste caso em particular, estou lidando com um array com arrays aninhados e preciso do índice 0
+*/
 function particionar_array_de_arrays(criterio, colecao, esquerda, direita) {
   const ref = colecao[direita][0]
   let menor_pos_nova = esquerda - 1
@@ -251,34 +390,22 @@ function ordenar_array_de_arrays(criterio, colecao, esquerda, direita) {
 }
 
 function embaralhar(colecao, indice_de_partida) {
-  let n = n_aleatorio(0, len(colecao))
+  let n = 0
   for (let i = indice_de_partida; i < len(colecao); i++) {
+    n = n_aleatorio(0, len(colecao))
     const pos_inicial = colecao[i]
     colecao[i] = colecao[n]
     colecao[n] = pos_inicial
   }
-  return colecao
 }
 
-function menu() {
-  return `
-  ========== VEICULOS ==========
-  0 - Sair
-  1 - Nova montadora
-  2 - Ver montadoras
-  3 - Novo veiculo
-  4 - Ver veiculos
-  5 - Mostrar montadoras por pais
-  6 - Mostrar veiculos por pais
-  7 - Mostrar montadoras em ordem alfabetica
-  >>> `
-}
-
+// Controle de rolagem de conteúdo no terminal
 function continuar() {
   nova_entrada_txt('\n<<< CONTINUE PRESSIONANDO ENTER >>>\n')
   console.clear()
 }
 
+// --------------------------------------------------- Genéricos ---------------------------------------------------
 function len(colecao) {
   let contador = 0
   for (let i in colecao) {
@@ -299,6 +426,7 @@ function n_aleatorio(min, max) {
   return Math.floor(Math.random() * (max - min) - min)
 }
 
+// Usado somente para criação dinâmica (quando não é usada entradas de terminal)
 function novo_registro(registro, chaves, valores) {
   const registro_temp = {}
   const ultimo_i = len(registro)
