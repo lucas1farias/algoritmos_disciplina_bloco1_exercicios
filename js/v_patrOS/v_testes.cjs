@@ -106,4 +106,29 @@ montadoras_[montadoras_i] = {
 montadoras_i++
 
 const conteudo = formatar_texto(montadoras_, ['id', 'nome', 'pais', 'ano_fundacao'])
-escrever_em_arquivo(arquivo, 'montadoras.txt', conteudo)
+// escrever_em_arquivo(arquivo, 'montadoras.txt', conteudo)
+
+function fatiar(colecao, min, max) {
+  let string = ''
+  for (let i = min; i <= max; i++) {
+    string += colecao[i]
+  }
+  return string
+}
+
+function nova_lista(criterio, colecao, separador) {
+  const array = []
+  let array_i = 0
+  let pos = 0
+  for (let i = 0; i < len(colecao); i++) {
+    if (colecao[i] === separador) {
+      array[array_i] = criterio(colecao, pos, i - 1)
+      array_i++
+      pos = i + 1
+    }
+  }
+  return array
+}
+
+const txt = 'Lucas\nLanna\nLuana'
+console.log(nova_lista(fatiar, txt + '\n', '\n'))

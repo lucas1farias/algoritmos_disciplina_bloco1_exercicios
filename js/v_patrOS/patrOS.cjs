@@ -1,6 +1,5 @@
 
 
-// 1. Meu algoritmo foi modificado para esta versão
 const { ulid } = require('ulid')
 const entrada_terminal = require('readline-sync')
 const arquivo = require('fs')
@@ -154,7 +153,7 @@ function main() {
   escrever_em_arquivo(
     arquivo, 
     'montadoras.txt', 
-    formatar_objetos_em_textos(montadoras, ['id', 'nome', 'pais', 'ano_fundacao'], 0)
+    formatar_objetos_em_linha(montadoras, ['id', 'nome', 'pais', 'ano_fundacao'], 0)
   )
 
   // REGISTRO DOS MODELOS DE VEÍCULOS EM DOC
@@ -162,7 +161,7 @@ function main() {
   escrever_em_arquivo(
     arquivo, 
     'modelos.txt', 
-    formatar_objetos_em_textos(
+    formatar_objetos_em_linha(
       modelos, ['id', 'nome', 'montadora', 'valor_referencia', 'motorizacao', 'turbo', 'automatico'], 1
     )
   )
@@ -172,7 +171,7 @@ function main() {
   escrever_em_arquivo(
     arquivo, 
     'veiculos.txt', 
-    formatar_objetos_em_textos(
+    formatar_objetos_em_linha(
       modelos_v2, ['id', 'modelo_veiculo', 'cor', 'ano_fabricacao', 'ano_modelo', 'valor', 'placa'], 2
     )
   )
@@ -253,7 +252,7 @@ function percorrer_com_intervalo(registro) {
   }
 }
 
-function formatar_objetos_em_textos(registro, chaves, tipo) {
+function formatar_objetos_em_linha(registro, chaves, tipo) {
   let linha = ''
   let pos = 0
   
