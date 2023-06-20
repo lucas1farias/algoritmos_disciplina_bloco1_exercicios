@@ -1,0 +1,23 @@
+
+
+02:25
+Inicialização dos modelos
+As montadoras já existirão
+Quando for pegar o atributo "montadora" que veio do arquivo
+
+3 arquivos: montadoras, modelos, veículos
+Como vai ser o arquivo para modelos?
+
+modelo_veiculo = [
+    {
+        'id': nova_ulid(), 
+        'nome': '', 
+        'montadora': registro_montadora, 
+        'valor_referencia': int, 
+        'motorizacao': float, 
+        'turbo': bool, 
+        'automatico': bool
+    }
+]
+
+É dito que em "montadora", do registro, só se resgata "id"

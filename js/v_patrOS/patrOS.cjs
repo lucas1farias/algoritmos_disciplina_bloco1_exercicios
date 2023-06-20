@@ -3,11 +3,12 @@
 // 1. Meu algoritmo foi modificado para esta versão
 const { ulid } = require('ulid')
 const entrada_terminal = require('readline-sync')
+const arquivo = require('fs')
 
 function main() {
   /* 1. Ao iniciar o programa, pedir ao usuário: seu nome e cargo. (Ex.: "João", "Gerente") */
-  let nome_usuario = entrada_terminal.question('Informe seu NOME >>> ')
-  let cargo_usuario = entrada_terminal.question('Informe seu CARGO >>> ')
+  // let nome_usuario = entrada_terminal.question('Informe seu NOME >>> ')
+  // let cargo_usuario = entrada_terminal.question('Informe seu CARGO >>> ')
 
   /* 2. Criar uma lista vazia para botar as montadoras. */
   let montadoras = []
@@ -117,46 +118,82 @@ function main() {
   }
 
   /* 15. Altere o nome do usuário e o cargo */
+  continuar('Os dados iniciais do usuário foram alterados...')
   nome_usuario = 'Bot'
   cargo_usuario = 'Hacker'
 
   /* 16: Crie um array de veículos "veiculos_montadora_b", resultado de uma operação de filtro apenas da Montadora B */
   const veiculos_montadora_b = filtrar(criterio_nome_da_montadora, modelos_v2, montadoras[1]['nome'])
-  console.log('========== Veículos da montadora B ==========')
-  console.log(veiculos_montadora_b)
+  continuar('Os veículos da montadora_B foram encontrados...')
+  exibir('========== Veículos da montadora B ==========')
+  percorrer_com_intervalo(veiculos_montadora_b)
   
   /* 17. Guarde em "soma_estoque" o somatório do valor de todos os veículos (reduce) */
   const soma_estoque = reduzir_limitada(criterio_somar, modelos_v2, 0, 'valor')
-  console.log('========== Preço de todos os veículos ==========')
-  console.log(soma_estoque)
+  continuar('O preco de todos os veículos foi calculado...')
+  exibir('========== Preço de todos os veículos ==========')
+  exibir(`R$ ${soma_estoque}`)
 
   /* 18. Guarde em "veiculo_mais_caro" o veículo mais caro do estoque (reduce) */
   const veiculo_mais_caro = reduzir_limitada(criterio_maior, modelos_v2, 0, 'valor')
-  console.log('========== VEÍCULO MAIS CARO ==========')
-  console.log(veiculo_mais_caro)
+  continuar('O veículo mais caro foi encontrado...')
+  exibir('========== VEÍCULO MAIS CARO ==========')
+  percorrer_com_intervalo(veiculo_mais_caro)
   
   for (let i = 0; i < len(modelos_v2); i++) {
     if (modelos_v2[i]['valor'] === veiculo_mais_caro) {
-      console.log(modelos_v2[i])
+      exibir(modelos_v2[i])
+      entrada_terminal.question('PROXIMO = ENTER')
+      console.clear()
       break
     }
   }
+
+  // REGISTRO DAS MONTADORAS EM DOC
+  continuar('As montadoras foram anexadas textualmente...')
+  escrever_em_arquivo(
+    arquivo, 
+    'montadoras.txt', 
+    formatar_objetos_em_textos(montadoras, ['id', 'nome', 'pais', 'ano_fundacao'], 0)
+  )
+
+  // REGISTRO DOS MODELOS DE VEÍCULOS EM DOC
+  continuar('Os modelos de veículos foram anexados textualmente...')
+  escrever_em_arquivo(
+    arquivo, 
+    'modelos.txt', 
+    formatar_objetos_em_textos(
+      modelos, ['id', 'nome', 'montadora', 'valor_referencia', 'motorizacao', 'turbo', 'automatico'], 1
+    )
+  )
+
+  // REGISTRO DOS VEÍCULOS EM DOC
+  continuar('Os veículos foram anexados textualmente...')
+  escrever_em_arquivo(
+    arquivo, 
+    'veiculos.txt', 
+    formatar_objetos_em_textos(
+      modelos_v2, ['id', 'modelo_veiculo', 'cor', 'ano_fabricacao', 'ano_modelo', 'valor', 'placa'], 2
+    )
+  )
   
   /* 19
   Crie uma nova lista a partir do mapeamento da lista "montadoras" que tenha apenas os atributos: 
     . nome, ano_de_fundacao, que tem o nome da montadora e quantos anos ela tem.
   */
-  console.log('========== MONTADORAS COM ATRIBUTOS FILTRADOS ==========')
+  continuar('Dados filtrados sobre as montadoras...')
+  exibir('========== MONTADORAS COM ATRIBUTOS FILTRADOS ==========')
   const montadoras_com_filtro = mapear_atribs_especificos(montadoras)
   const data_hoje = Number(nova_lista(fatiar, `${new Date}`, ' ')[3])
   montadoras = mapear_registro(criterio_subtrair, montadoras_com_filtro, data_hoje, 'ano_fundacao')
-  console.log(montadoras)
+  percorrer_com_intervalo(montadoras)
 
-  console.log('========== REGISTROS LIMPOS ==========')
+  continuar('Limpeza dos dados executada...')
+  exibir('========== REGISTROS LIMPOS ==========')
   const todos_os_dados = [
     montadoras, montadora_A, modelo_T, modelo_U, modelo_V, modelos, veiculo_F, veiculo_G, modelos_v2
   ]
-  
+
   /* 20
   Limpar, apagar todos os objetos criados anteriormente, mantendo apenas em memória: nome e cargo do usuário.
   Substitui todo o procedimento em comentário abaixo
@@ -174,9 +211,9 @@ function main() {
 
   montadoras_i = 0
   modelos_v2_i = 0
-  console.log(todos_os_dados)
-  console.log(nome_usuario)
-  console.log(cargo_usuario)
+  exibir(todos_os_dados)
+  exibir(nome_usuario)
+  exibir(cargo_usuario)
   
   /* ANTES
   montadoras = limpar_registro(montadoras)
@@ -206,6 +243,52 @@ function main() {
   console.log(veiculo_G)
   console.log(modelos_v2)
   */
+}
+
+function percorrer_com_intervalo(registro) {
+  for (let i = 0; i < len(registro); i++) {
+    exibir(registro[i])
+    entrada_terminal.question('PROXIMO = ENTER')
+    console.clear()
+  }
+}
+
+function formatar_objetos_em_textos(registro, chaves, tipo) {
+  let linha = ''
+  let pos = 0
+  
+  if (tipo === 0) {
+    /* 'id', 'nome', 'pais', 'ano_fundacao' */
+    for (let i = 0; i < len(registro); i++) {
+      const cada_i = registro[i]
+      linha += `${cada_i[chaves[pos]]} ${cada_i[chaves[pos + 1]]} ${cada_i[chaves[pos + 2]]} ${cada_i[chaves[pos + 3]]}\n`
+    }
+    return linha
+  }
+  
+  // modelos
+  else if (tipo === 1) {
+    /* 'id', 'nome', 'montadora['id']', 'valor_referencia', 'motorizacao', 'turbo', 'automatico' */
+    for (let i = 0; i < len(registro); i++) {
+      const cada_i = registro[i]
+      linha += `${cada_i[chaves[pos]]} ${cada_i[chaves[pos + 1]]} ${cada_i[chaves[pos + 2]]['id']} ${cada_i[chaves[pos + 3]]} ${cada_i[chaves[pos + 4]]} ${cada_i[chaves[pos + 5]]} ${cada_i[chaves[pos + 6]]}\n`
+    }
+    return linha
+  }
+
+  // veículos
+  else if (tipo === 2) {
+    /* 'id', 'modelo_veiculo', 'cor', 'ano_fabricacao', 'ano_modelo', 'valor', 'placa' */
+    for (let i = 0; i < len(registro); i++) {
+      const cada_i = registro[i]
+      linha += `${cada_i[chaves[pos]]} ${cada_i[chaves[pos + 1]]['id']} ${cada_i[chaves[pos + 2]]} ${cada_i[chaves[pos + 3]]} ${cada_i[chaves[pos + 4]]} ${cada_i[chaves[pos + 5]]} ${cada_i[chaves[pos + 6]]}\n`
+    }
+    return linha
+  }
+}
+
+function escrever_em_arquivo(ref, nome_arquivo, conteudo) {
+  ref.writeFileSync(nome_arquivo, conteudo)
 }
 
 function limpar_registro(registro, array=true) {
@@ -308,6 +391,16 @@ function len(colecao) {
 
 function nova_ulid() {
   return ulid()
+}
+
+function exibir(conteudo) {
+  console.log(conteudo)
+}
+
+function continuar(info) {
+  exibir('\n' + info)
+  entrada_terminal.question('<<< PRESSIONE ENTER PARA A ETAPA SEGUINTE >>>')
+  console.clear()
 }
 
 main()
