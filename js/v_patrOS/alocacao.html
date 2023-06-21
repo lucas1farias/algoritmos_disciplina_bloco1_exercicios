@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulação de alocação</title>
+  <style>
+    body {
+      background-color: #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+    }
+
+    .hidden {
+      visibility: hidden;
+    }
+
+    #alocacao {
+      margin: 2rem;
+    }
+
+    #return {
+      background-color: white;
+      display: inline;
+      padding: .5rem;
+      margin: .5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 2rem black;
+      cursor: pointer;
+    }
+
+    #advance {
+      background-color: black;
+      display: inline;
+      padding: .5rem;
+      margin: .5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 2rem white;
+      color: white;
+      cursor: pointer;
+    }
+
+    #reset {
+      background-color: red;
+      display: inline;
+      padding: .5rem;
+      margin: .5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 2rem red;
+      color: white;
+      cursor: pointer;
+    }
+
+    #legendas {
+      margin: 1rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    @keyframes destaque {
+      0% {background-color: inherit;}
+      25% {}
+      50% {}
+      75% {}
+      100% {}
+    }
+
+    @keyframes movimento {
+      0% {transform: translate(.25rem, .25rem);}
+      25% {}
+      50% {}
+      75% {}
+      100% {transform: translate(-.25rem, -.25rem);}
+    }
+  </style>
+  <body>
+    <main>
+      <div id="return">Retornar</div>
+      <div id="advance">Avançar</div>
+      
+      <div id="legendas">
+        <div>Slot em movimento: dados do tipo valor criados fora de uma coleção/registro</div>
+        <div>Slot redondo: dados adicionados diretamente numa coleção ou registro</div>
+        <div>Slot de borda escura: endereços que apontam para outro</div>
+      </div>
+      
+      <section class="main">
+        <div id="alocacao" class="flex"></div>
+      </section>
+    </main>
+
+    <script>
+      function len(colecao) {
+        let contador = 0
+        for (let i of colecao) {
+          contador++
+        }
+        return contador
+      }
+
+      function criarDiv(pai, giros) {
+        const array = []
+        let array_i = 0
+        for (let i = 0; i < giros; i++) {
+          array[array_i] = document.createElement('div')
+          array[array_i].className = 'child'
+          array[array_i].style.border = 'black solid 1px'
+          array[array_i].style.padding = '1rem'
+          array[array_i].style.margin = '.10rem'
+          array[array_i].style.fontWeight = 'bold'
+          array[array_i].style.fontSize = '1.1rem'
+          array[array_i].style.minHeight = '70px'
+          array[array_i].style.minWidth = '70px'
+          array[array_i].style.maxHeight = '70px'
+          array[array_i].style.maxWidth = '70px'
+          array[array_i].style.overflow = 'hidden'
+          array_i++
+        }
+
+        const caixa = document.createElement('div')
+        caixa.className = 'container'
+        
+        for (let i = 0; i < array.length; i++) {
+          caixa.appendChild(array[i])
+        }
+        pai.appendChild(caixa)
+      }
+      
+      function criar_multiplos_elementos(callback, pai, giros_callback, giros) {
+        for (let i = 0; i < giros; i++) {
+          callback(pai, giros_callback)
+        }
+      }
+      
+      function operacao_0(colecao) {
+        colecao[0].style.backgroundColor = cor_padrao
+        colecao[1].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_1(colecao) {
+        colecao[0].textContent = 'A --- Alceu'
+        colecao[0].style.backgroundColor = 'brown'
+        colecao[0].style.animation = movimento
+
+        // posterior
+        colecao[1].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_2(colecao) {
+        colecao[1].textContent = 'B --- pedreiro'
+        colecao[1].style.backgroundColor = 'yellow'
+        colecao[1].style.animation = movimento
+        
+        // posterior
+        colecao[2].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_3(colecao) {
+        colecao[2].textContent = `C ---o montadoras`
+        colecao[2].style.backgroundColor = `salmon`
+        colecao[2].style.animation = efeito
+        
+        // posterior
+        for (let i = 3; i <= 7; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_4(colecao) {
+        const array = [
+            `I ---o montadora_A`, 'J --- 01H3E4964QWG8XBC7GSJ122XCB',
+            'K --- Arg', 'L --- Argentina', 'M --- 1966'
+        ]
+        let array_i = 0
+        
+        for (let i = 3; i <= 7; i++) {
+          i === 3 ? colecao[i].style.animation = efeito : null
+          i !== 3 ? colecao[i].style.animation = movimento : null
+          colecao[i].style.backgroundColor = 'green'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+        
+        // posterior
+        colecao[8].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_5(colecao) {
+        colecao[8].textContent = `D ---o I`
+        colecao[8].style.backgroundColor = 'salmon'
+        colecao[8].style.border = borda
+        colecao[8].style.animation = efeito
+        
+        // posterior
+        for (let i = 9; i <= 12; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_6(colecao) {
+        const array = [
+            'E ---o 01H3E56HH8NHF366J2MN50TBZS', 'F ---o Bul',
+            'G ---o Bulgaria', 'H ---o 1972'
+        ]
+        let array_i = 0
+
+        for (let i = 9; i <= 12; i++) {
+          colecao[i].style.backgroundColor = 'salmon'
+          colecao[i].style.borderRadius = '2rem'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+        
+        // posterior
+        for (let i = 13; i <= 20; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_7(colecao) {
+        const array = [
+          `N ---o modelo_T`, 'O --- 01H3E6QERMW9Y24HP8CZD07MG6',
+          'P --- mod_T', 'Q --- E F G H', 'R --- 55000',
+          'S --- 2', 'T --- false', 'U --- true'
+        ]
+        
+        let array_i = 0
+
+        for (let i = 13; i <= 20; i++) {
+          i === 13 ? colecao[i].style.animation = efeito : null
+          colecao[i].style.backgroundColor = 'cyan'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[16].style.border = borda
+        
+        // posterior
+        for (let i = 21; i <= 28; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_8(colecao) {
+        const array = [
+          `V ---o modelo_U`, 'W --- 01H3E9K6VDSMATRCEAJTJY1EEB',
+          'X --- mod_U', 'Y --- E F G H', 'Z --- 51000', 'AA --- 1.8', 'AB --- false', 'AC --- false' 
+        ]
+        let array_i = 0
+        
+        for (let i = 21; i <= 28; i++) {
+          i === 21 ? colecao[i].style.animation = efeito : null
+          colecao[i].style.backgroundColor = 'orangered'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+        
+        colecao[24].style.border = borda
+        
+        // posterior
+        for (let i = 29; i <= 36; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_9(colecao) {
+        const array = [
+          `AD ---o modelo_V`, 'AE --- 01H3EB6V0YPBKXJ7RKXE9PJ77Y',
+          'AF --- mod_V', 'AG --- D', 'AH --- 62000', 'AI --- 1.6',
+          'AJ --- false', 'AK --- false'
+        ]
+        let array_i = 0
+
+        for (let i = 29; i <= 36; i++) {
+          i === 29 ? colecao[i].style.animation = efeito : null
+          colecao[i].style.backgroundColor = 'yellowgreen'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[32].style.border = borda
+        
+        // posterior
+        for (let i = 37; i <= 40; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_10(colecao) {
+        const array = [
+          `AL ---o modelos`, 'AM --- N', 'AN --- V', 
+          'AO --- AD'
+        ]
+        let array_i = 0
+
+        for (let i = 37; i <= 40; i++) {
+          colecao[i].style.animation = efeito
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[37].style.backgroundColor = 'mediumseagreen'
+        colecao[38].style.backgroundColor = 'cyan'
+        colecao[39].style.backgroundColor = 'orangered'
+        colecao[40].style.backgroundColor = 'yellowgreen'
+        
+        for (let i = 38; i <= 40; i++) {
+          colecao[i].style.border = borda
+        }
+        
+        // posterior
+        for (let i = 41; i <= 48; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_11(colecao) {
+        const array = [
+          `AP ---o veiculo_F`, 'AQ --- 01H3ECJ3N15YJ9E49RFV24C8TE',
+          'AR --- V', 'AS --- Prata', 'AT --- 2017', 'AU --- 2019',
+          'AV --- 70000', 'AW - UVAS-0675'
+        ]
+        let array_i = 0
+        
+        for (let i = 41; i <= 48; i++) {
+          i === 41 ? colecao[i].style.animation = efeito : null
+          i !== 41 ? colecao[i].style.borderRadius = '2rem' : null
+          colecao[i].style.backgroundColor = 'blue'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[43].style.border = borda
+        
+        // posterior
+        for (let i = 49; i <= 56; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_12(colecao) {
+        const array = [
+          `AX ---o veiculo_G`, 'AY --- 01H3EDYVBYH2TTG25MDZMHBVWM',
+          'AZ --- AD', 'BA --- Azul Oceano', 'BB --- 2020', 'BC --- 2022',
+          'BD --- 75000', 'BE - MEGA-7702'
+        ]
+        let array_i = 0
+        
+        for (let i = 49; i <= 56; i++) {
+          i === 49 ? colecao[i].style.animation = efeito : null
+          colecao[i].style.backgroundColor = 'crimson'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[51].style.border = borda
+        
+        // posterior
+        colecao[57].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_13(colecao) {
+        colecao[57].textContent = 'BF ---o veiculos_montadora_b'
+        colecao[57].style.backgroundColor = 'magenta'
+        colecao[57].style.animation = efeito
+        
+        // posterior
+        colecao[58].style.backgroundColor = cor_padrao
+        colecao[59].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_14(colecao) {
+        colecao[58].style.backgroundColor = 'blue'
+        colecao[59].style.backgroundColor = 'crimson'
+        colecao[58].style.animation = efeito
+        colecao[59].style.animation = efeito
+        colecao[58].textContent = 'BG ---o AP'
+        colecao[59].textContent = 'BH ---o AX'
+        
+        colecao[58].style.border = borda
+        colecao[59].style.border = borda
+
+        // posterior
+        for (let i = 60; i <= 67; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_15(colecao) {
+        const array = [
+          'BI --- 01H3EDYVBYH2TTG25MDZMHBVWM', 'BJ --- N',
+          'BK --- Marfim', 'BL --- 2007', 'BM --- 2011', 'BN --- 6000',
+          'BO --- HALF-0202'
+        ]
+        let array_i = 0
+        
+        for (let i = 60; i <= 66; i++) {
+          colecao[i].style.backgroundColor = 'pink'
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[61].style.border = borda
+        
+        // posterior
+        colecao[0].textContent = 'A --- Alceu'
+      }
+      
+      function operacao_16(colecao) {
+        colecao[0].textContent = 'A --- Bot'
+        colecao[1].textContent = 'B --- pedreiro'
+      }
+
+      function operacao_17(colecao) {
+        colecao[1].textContent = 'B --- Hacker'
+        
+        // posterior
+        for (let i = 68; i <= 70; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_18(colecao) {
+        const array = [
+          'BP ---o veiculos_montadora_b', 'BQ ---o N', 'BR ---o V'
+        ]
+        let array_i = 0
+
+        for (let i = 67; i <= 70; i++) {
+          i === 67 ? colecao[i].style.backgroundColor = 'white' : null
+          
+          colecao[i].style.animation = efeito
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+        colecao[68].style.backgroundColor = 'cyan'
+        colecao[69].style.backgroundColor = 'orangered'
+
+        colecao[68].style.border = borda
+        colecao[69].style.border = borda
+
+        // posterior
+        colecao[70].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_19(colecao) {
+        colecao[70].style.backgroundColor = '#9aa982'
+        colecao[70].style.animation = movimento
+        colecao[70].textContent = `BS --- ${205000}`
+
+        // posterior
+        colecao[71]. style.backgroundColor = cor_padrao
+      }
+
+      function operacao_20(colecao) {
+        colecao[71].style.backgroundColor = '#1f5864'
+        colecao[71].style.animation = efeito
+        colecao[71].textContent = `BT ---o veiculo_mais_caro`
+        
+        // posterior
+        colecao[72].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_21(colecao) {
+        colecao[72].style.backgroundColor = 'crimson'
+        colecao[72].style.animation = efeito
+        colecao[72].textContent = `BU ---o AX`
+
+        colecao[72].style.border = borda
+        
+        // posterior
+        colecao[73].style.backgroundColor = cor_padrao
+      }
+
+      function operacao_22(colecao) {
+        colecao[73].style.backgroundColor = '#e71b13'
+        colecao[73].style.animation = efeito
+        colecao[73].textContent = `BV ---o montadoras_alteradas`
+        
+        // posterior
+        for (let i = 74; i <= 77; i++) {
+          colecao[i].style.backgroundColor = cor_padrao
+        }
+      }
+
+      function operacao_23(colecao) {
+        const array = [
+          'BW --- K', 'BX --- 57', 'BY --- F', 'BZ --- 51'
+        ]
+        let array_i = 0
+
+        for (let i = 74; i <= 77; i++) {
+          colecao[i].textContent = array[array_i]
+          array_i++
+        }
+
+        colecao[74].style.backgroundColor = 'green'
+        colecao[74].style.border = borda
+        colecao[75].style.backgroundColor = '#ab750f'
+        colecao[76].style.backgroundColor = 'salmon'
+        colecao[76].style.border = borda
+        colecao[77].style.backgroundColor = '#54235e'
+
+        coleca5[76].style.animation = movimento
+        colecao[77].style.animation = movimento
+      }
+
+      function operacao_24(colecao) {
+        for (let i = 2; len(colecao); i++) {
+          colecao[i].textContent = 0
+          colecao[i].style.backgroundColor = ''
+          colecao[i].style.animation = ''
+        }
+      }
+
+      let operacao = 0
+      const movimento = 'movimento 1s infinite'
+      const efeito = 'destaque 5s infinite'
+      const cor_padrao = '#444'
+      const borda = 'black solid 5px'
+      const matriz = document.getElementById('alocacao')
+      const botaoAvancar = document.getElementById('advance')
+      const botaoVoltar = document.getElementById('return')
+
+      criar_multiplos_elementos(criarDiv, matriz, 6, 13)
+      const slots = document.querySelectorAll('.child')
+      
+      botaoAvancar.addEventListener('click', () => {
+        operacao++
+      })
+
+      botaoVoltar.addEventListener('click', () => {
+        operacao--
+      })
+  
+      setInterval(() => {
+        operacao < 0 ? operacao = 0 : null
+        operacao === 0 ? operacao_0(slots) : null
+        operacao === 1 ? operacao_1(slots) : null
+        operacao === 2 ? operacao_2(slots) : null
+        operacao === 3 ? operacao_3(slots) : null
+        operacao === 4 ? operacao_4(slots) : null
+        operacao === 5 ? operacao_5(slots) : null
+        operacao === 6 ? operacao_6(slots) : null
+        operacao === 7 ? operacao_7(slots) : null
+        operacao === 8 ? operacao_8(slots) : null
+        operacao === 9 ? operacao_9(slots) : null
+        operacao === 10 ? operacao_10(slots) : null
+        operacao === 11 ? operacao_11(slots) : null
+        operacao === 12 ? operacao_12(slots) : null
+        operacao === 13 ? operacao_13(slots) : null
+        operacao === 14 ? operacao_14(slots) : null
+        operacao === 15 ? operacao_15(slots) : null
+        operacao === 16 ? operacao_16(slots) : null
+        operacao === 17 ? operacao_17(slots) : null
+        operacao === 18 ? operacao_18(slots) : null
+        operacao === 19 ? operacao_19(slots) : null
+        operacao === 20 ? operacao_20(slots) : null
+        operacao === 21 ? operacao_21(slots) : null
+        operacao === 22 ? operacao_22(slots) : null
+        operacao === 23 ? operacao_23(slots) : null
+        operacao === 24 ? operacao_24(slots) : null
+        operacao > 24 ? operacao = 24 : null
+        console.log(operacao)
+      }, 1)
+      // operacao_1(slots)
+    </script>
+  </body>
+</html>
