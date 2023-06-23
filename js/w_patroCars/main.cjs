@@ -38,14 +38,15 @@ function main() {
   let entrada = undefined
   let entradaB = undefined
   
-  // Montadora pré-definidas p/ evitar perder tempo com chamadas múltiplas de terminal
+  // Montadora pré-definida: Bra
   montadoras[0] = {
     'id': nova_ulid(),
     'nome': 'Bra',
     'pais': 'Brasil',
     'ano_fundacao': 1972
   }
-
+  
+  // Montadora pré-definida: Arg
   montadoras[1] = {
     'id': nova_ulid(),
     'nome': 'Arg',
@@ -53,7 +54,7 @@ function main() {
     'ano_fundacao': 1966
   }
 
-  // Modelos pré-definidos p/ evitar perder tempo com chamadas múltiplas de terminal
+  // Modelo "A" pré-definido vinculado a: Bra
   modelos[0] = {
     'id': nova_ulid(), 
     'nome': 'A', 
@@ -63,7 +64,8 @@ function main() {
     'turbo': true, 
     'automatico': true
   }
-
+  
+  // Modelo "B" pré-definido vinculado a: Bra
   modelos[1] = {
     'id': nova_ulid(), 
     'nome': 'B', 
@@ -74,6 +76,7 @@ function main() {
     'automatico': true
   }
 
+  // Modelo "C" pré-definido vinculado a: Arg
   modelos[2] = {
     'id': nova_ulid(), 
     'nome': 'C', 
@@ -100,17 +103,17 @@ function main() {
     }
     else if (entrada === opcoes.listar) {
       exibir(infos['montadoras_disponiveis'])
-      exibir_montadoras_em_linha(montadoras, chaves['montadora'])
+      exibir_objetos(montadoras, chaves['montadora'], 'montadoras')
       continuar()
     }
     else if (entrada === opcoes.alterar) {
       exibir(infos['montadoras_disponiveis'])
       exibir(infos['escolher_id'])
-      exibir_nomes_das_montadoras(montadoras, chaves['montadora'][1])
+      exibir_nomes(montadoras, chaves['montadora'][1])
       const montadora_i = nova_entrada('Informe o NÚMERO da MONTADORA com base na lista cima >>> ')
       
       exibir('Informe o NÚMERO do CAMPO a ser alterado')
-      exibir_atribs_montadora(chaves['montadora'])
+      exibir_atribs(chaves['montadora'])
       const atrib = nova_entrada('Informe o CAMPO da MONTADORA a ser alterado >>> ')
       const novo_valor = nova_entrada_txt('Informe o NOVO VALOR >>> ')
       
@@ -123,8 +126,24 @@ function main() {
       }
       continuar()
     }
+    // Na parte 2, foi pedida uma funcionalidade que afeta diretamente esse recurso
+    /*
+    Ao tentar remover a "montadora", se esta tiver "modelos cadastrados"
+    informar ao usuário e perguntar se deseja realmente remover
+    
+    SIM: removerá a "montadora" e todos os seus modelos
+    
+    Para eu saber se uma "montadora" possui um "modelo" vinculado, eu preciso:
+        . Pedir o índice da montadora (para remover a montadora ao final)
+        . Percorrer os modelos['montadora'] que aponta para montadoras[i]
+        . Se modelos[i]['montadora']['nome'] === montadoras[i]['nome']
+        . Add num array "i"
+        . Se len(array) != 0
+        . Avisar o usuário que a montadora "X" possui modelos "Y"
+        . Se ele disser que pode, percorrer "array" e remover via "modelos[i]"
+    */
     else if (entrada === opcoes.remover) {
-      exibir_nomes_das_montadoras(montadoras, chaves['montadora'][1])
+      exibir_nomes(montadoras, chaves['montadora'][1])
       const indice_montadora = nova_entrada('Informe o NÚMERO que representa a MONTADORA >>> ')
       montadoras = remover_montadora_limitada(montadoras, indice_montadora)
       continuar()
@@ -163,7 +182,9 @@ function main() {
         'criar_modelo': 1,
         'listar_modelos': 2,
         'listar_modelos_filtro': 3,
-        'remover_modelo': 4
+        'remover_modelo': 4,
+        'alterar_modelo': 5,
+        'ver_objeto_da_montadora_do_modelo': 6
       }
 
       const chaves_ = {
@@ -174,15 +195,11 @@ function main() {
       
       // Eu preciso do índice do montadora para vincular um modelo a ela
       if (entradaB === opcoes.criar_modelo) {
-        exibir(infos['montadoras_disponiveis'])
-        exibir(infos['escolher_id'])
-        exibir_nomes_das_montadoras(montadoras, chaves['montadora'][1])
+        exibir(rotulos('indice_das_montadoras'))
+        exibir_nomes(montadoras, chaves['montadora'][1])
         
-        /*
-        (id: ULID, nome: string, montadora: Montadora, valor_referencia: number,
-        motorizacao: number, turbo: boolean, automatico: boolean)
-        */
-        const montadora_i = nova_entrada(frases_de_input_parte2('pedir_i_da_montadora'))
+        // ['id', 'nome', 'montadora', 'valor_referencia', 'motorizacao', 'turbo', 'automatico']
+        const montadora_i = nova_entrada(frases_de_input_parte2('informar_i_da_montadora'))
         const nome_modelo = nova_entrada_txt(frases_de_input_parte2('informar_nome_modelo'))
         const valor_ref = nova_entrada(frases_de_input_parte2('informar_valor_referencia'))
         const motorizacao = nova_entrada(frases_de_input_parte2('informar_potencia_motor'))
@@ -195,7 +212,7 @@ function main() {
           eh_turbo === 1 ? eh_turbo = true : eh_turbo = false
           eh_automatico === 1 ? eh_automatico = true : eh_automatico = false
         }
-        // Um objeto de veículo vinculado à uma montadora X via i=2
+        // Um objeto de veículo vinculado à uma montadora X (pelo i=2 do array passado como parâmetro abaixo)
         novo_registro(
           modelos, 
           chaves_['modelo'], 
@@ -205,28 +222,89 @@ function main() {
       }
 
       else if (entradaB === opcoes.listar_modelos) {
-        exibir(infos['montadoras_disponiveis'])
-        exibir_nomes_das_montadoras(modelos, chaves_['modelo'][1])
+        exibir(rotulos('modelos_disponiveis'))
+        exibir_objetos(modelos, chaves_['modelo'], 'modelos')
+        continuar()
       }
       
       // Eu preciso do índice da montadora p/ filtrar o modelo vinculado à montadora X
       else if (entradaB === opcoes.listar_modelos_filtro) {
-        exibir(infos['montadoras_disponiveis'])
-        exibir(infos['escolher_id'])
-        exibir_nomes_das_montadoras(montadoras, chaves['montadora'][1])
+        exibir(rotulos('indice_das_montadoras'))
+        exibir_nomes(montadoras, chaves['montadora'][1])
         
-        const montadora_i = nova_entrada(frases_de_input_parte2('pedir_i_da_montadora'))
+        const montadora_i = nova_entrada(frases_de_input_parte2('informar_i_da_montadora'))
         
-        exibir(frases_de_input_parte2('veiculos_vinculados_nessa_montadora'))
+        exibir(rotulos('veiculos_vinculados_nessa_montadora'))
         filtrar_limitado(criterio_i_montadora, modelos, montadoras, montadora_i, chaves_['modelo'])
+        continuar()
       }
       
       // Estou ciente de que a função não é performática e que poderia usar "splice"
       else if (entradaB === opcoes.remover_modelo) {
-        exibir_nomes_das_montadoras(modelos, chaves_['modelo'][1])
-        const indice_montadora = nova_entrada(frases_de_input_parte2('pedir_i_da_montadora'))
-        modelos = remover_montadora_limitada(modelos, indice_montadora)
+        exibir(rotulos('indice_dos_modelos'))
+        exibir_nomes(modelos, chaves_['modelo'][1])
+        const modelo_i = nova_entrada(frases_de_input_parte2('informar_i_da_montadora'))
+        modelos = remover_montadora_limitada(modelos, modelo_i)
         continuar()
+      }
+
+      else if (entradaB === opcoes.alterar_modelo) {
+        exibir(rotulos('modelos_disponiveis'))
+        exibir_nomes(modelos, chaves_['modelo'][1])
+        
+        const modelo_i = nova_entrada(frases_de_input_parte2('informar_i_do_modelo'))
+        
+        exibir(rotulos('indice_dos_campos'))
+        exibir_atribs(chaves_['modelo'])
+
+        const atrib = nova_entrada(frases_de_input_parte2('informar_numero_do_atrib'))
+        let novo_valor = undefined
+        
+        /* 'id', 'nome', 'montadora', 'valor_referencia', 'motorizacao', 'turbo', 'automatico' */
+        /*       1       2            3                   4              5        6 */
+        /*       str     obj          int                 bool           bool     bool */
+        /* Se === 2, exibir qual a montadora via "modelos[modelo_i]['montadora']" */
+        /* Pedir uma nova entrada "montadora_i" para que o modelo seja vinculado a outra montadora */
+        
+        // CHAVE: nome
+        if (atrib === 1) {
+          novo_valor = nova_entrada_txt(frases_de_input_parte2('informar_novo_valor'))
+          alterar_atrib(modelos[modelo_i], chaves_['modelo'][atrib], novo_valor)
+        } 
+        
+        // CHAVE: montadora (+ complexo)
+        else if (atrib === 2) {
+          exibir(rotulos('montadora_desse_modelo'))
+          exibir(modelos[modelo_i]['montadora']['nome']) // montadora vinculada
+          exibir(rotulos('montadoras_disponiveis'))
+          exibir_nomes(montadoras, chaves['montadora'][1]) // opções de montadora
+          
+          novo_valor = nova_entrada_txt(frases_de_input_parte2('informar_i_da_montadora'))
+          const nova_montadora_vinculada = montadoras[novo_valor]
+          alterar_atrib(modelos[modelo_i], chaves_['modelo'][atrib], nova_montadora_vinculada)
+        }
+
+        // CHAVES: valor_referencia & motorizacao
+        else if (atrib === 3 || atrib === 4) {
+          novo_valor = nova_entrada_txt(frases_de_input_parte2('informar_novo_valor'))
+          alterar_atrib(modelos[modelo_i], chaves_['modelo'][atrib], Number(novo_valor))
+        }
+
+        // CHAVES: turbo & automatico
+        else if (atrib === 5 || atrib === 6) {
+          const valor_atual_do_atrib = modelos[modelo_i][chaves_['modelo'][atrib]]
+          alterar_atrib(modelos[modelo_i], chaves_['modelo'][atrib], !valor_atual_do_atrib)
+        }
+        continuar()
+      }
+      
+      // Opção adicional após editar "montadora", para verificar se mudou de forma mais ampla
+      else if (entradaB === opcoes.ver_objeto_da_montadora_do_modelo) {
+        exibir(rotulos('modelos_disponiveis'))
+        exibir_nomes(modelos, chaves_['modelo'][1])
+        const modelo_i = nova_entrada(frases_de_input_parte2('informar_i_do_modelo'))
+        exibir(modelos[modelo_i]['montadora'])
+        
       }
     }
   }
@@ -281,6 +359,8 @@ function menu_parte2() {
   2 - listar modelos
   3 - listar modelos por montadora
   4 - remover modelo
+  5 - alterar modelo
+  6 - ver objeto da montadora do modelo
   >>> `
 }
 
@@ -297,6 +377,21 @@ function continuar() {
   console.clear()
 }
 
+function rotulos(chave) {
+  const txt = {
+    'info': '\n========== INFO ==========',
+    'criar_modelo': '\n========== CRIAR MODELO ==========',
+    'montadoras_disponiveis': '\n========= MONTADORAS DISPONÍVEIS =========',
+    'modelos_disponiveis': '\n========= MODELOS DISPONÍVEIS =========',
+    'indice_das_montadoras': '\n========= INDICE DAS MONTADORAS ==========',
+    'indice_dos_modelos': '\n========= INDICE DOS MODELOS ==========',
+    'veiculos_vinculados_nessa_montadora': '\n========== VEICULOS DA MONTADORA ==========',
+    'montadora_desse_modelo': '\n==========  MONTADORA VINCULADA A ESTE MODELO ==========',
+    'indice_dos_campos': '\n========== INDICE DOS CAMPOS =========='
+  }
+  return txt[chave]
+}
+
 /* --------------------------------------------------------------------------------------------------------------- */
 // Entrada 1
 function novo_registro(registro, chaves, valores) {
@@ -309,21 +404,39 @@ function novo_registro(registro, chaves, valores) {
 }
 
 // Usado na entrada 2
-function exibir_montadoras_em_linha(colecao, chaves) {
-  for (let i = 0; i < len(colecao); i++) {
-    exibir(`${chaves[0]}: ${colecao[i][chaves[0]]} || ${chaves[1]}: ${colecao[i][chaves[1]]} || ${chaves[2]}: ${colecao[i][chaves[2]]} || ${chaves[3]}: ${colecao[i][chaves[3]]}`)
+function exibir_objetos(colecao, chaves, categoria) {
+  if (categoria === 'montadoras') {
+    /* [0] ignorado => ['id', 'nome', 'pais', 'ano_fundacao'] */
+    for (let i = 0; i < len(colecao); i++) {
+      const nome = `${chaves[1]}: ${colecao[i][chaves[1]]} || `
+      const pais = `${chaves[2]}: ${colecao[i][chaves[2]]} || `
+      const ano_fundacao = `${chaves[3]}: ${colecao[i][chaves[3]]}`
+      exibir(`${nome}${pais}${ano_fundacao}`)
+    }
+  }
+  else if (categoria === 'modelos') {
+    /* [0] ignorado => ['id', 'nome', 'montadora', 'valor_referencia', 'motorizacao', 'turbo', 'automatico'] */
+    for (let i = 0; i < len(colecao); i++) {
+      const nome = `${chaves[1]}: ${colecao[i][chaves[1]]} || `
+      const montadora = `${chaves[2]}: ${colecao[i][chaves[2]][chaves[1]]} || `
+      const valor_referencia = `${chaves[3]}: ${colecao[i][chaves[3]]} || `
+      const motorizacao = `${chaves[4]}: ${colecao[i][chaves[4]]} || `
+      const turbo = `${chaves[5]}: ${colecao[i][chaves[5]]} || `
+      const automatico = `${chaves[6]}: ${colecao[i][chaves[6]]}`
+      exibir(`${nome}${montadora}${valor_referencia}${motorizacao}${turbo}${automatico}`)
+    }
   }
 }
 
 // Usado na entrada 3
-function exibir_nomes_das_montadoras(colecao, chave_nome) {
+function exibir_nomes(colecao, chave_nome) {
   for (let i = 0; i < len(colecao); i++) {
     exibir(`${i}: ${colecao[i][chave_nome]}`)
   }
 }
 
 // Usado na entrada 3
-function exibir_atribs_montadora(chaves) {
+function exibir_atribs(chaves) {
   for (let i = 0; i < len(chaves); i++) {
     i !== 0 ? exibir(`${i}: ${chaves[i]}`) : null
   }
@@ -460,13 +573,16 @@ function nova_entrada_txt(conteudo) {
 */
 function frases_de_input_parte2(chave) {
   const frases = {
-    'pedir_i_da_montadora': 'Informe o NÚMERO da MONTADORA com base na lista cima >>> ',
+    'informar_i_da_montadora': 'Informe o INDICE da MONTADORA (valores acima) >>> ',
+    'informar_i_do_modelo': 'Informe o INDICE do MODELO (valores acima) >>> ',
+    'informar_numero_do_atrib': 'Qual o NUMERO do atributo? (valores acima) >>> ',
+    'informar_novo_valor': 'Informe o NOVO VALOR >>> ',
     'informar_nome_modelo': 'Informe o NOME do MODELO >>> ',
     'informar_valor_referencia': 'Informe a VALOR de REFERÊNCIA >>> ',
     'informar_potencia_motor': 'Informe a POTÊNCIA do MOTOR >>> ',
     'perguntar_se_eh_turbo': 'O modelo possui a propriedade "TURBO"? (0 - não / 1 - sim) >>> ',
     'perguntar_se_eh_automatico': 'O modelo possui a propriedade "AUTOMÁTICO"? (0 - não / 1 - sim) >>> ',
-    'veiculos_vinculados_nessa_montadora': '\n========== VEICULOS DA MONTADORA =========='
+    'informar_i_nome_campo': 'Informe o CAMPO da MONTADORA a ser alterado >>> '
   }
   return frases[chave]
 }
